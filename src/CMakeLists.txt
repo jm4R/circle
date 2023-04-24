@@ -1,8 +1,19 @@
+set(circle_include_dir ${circle_SOURCE_DIR}/include/circle)
+
 add_library(circle-core STATIC
-    circle.cpp
+    anchors.cpp
+    item.cpp
+    object.cpp
+    rectangle.cpp
+
+    ${circle_include_dir}/anchors.hpp
+    ${circle_include_dir}/item.hpp
+    ${circle_include_dir}/object.hpp
+    ${circle_include_dir}/rectangle.hpp
+    ${circle_include_dir}/fwd.hpp
 )
 
-target_include_directories(circle-core PUBLIC
+target_include_directories(circle-core SYSTEM PUBLIC
     ${circle_SOURCE_DIR}/include
 )
 

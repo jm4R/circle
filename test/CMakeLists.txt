@@ -5,6 +5,7 @@ enable_testing()
 include(Catch)
 
 add_executable(circle-test
+    anchors_test.cpp
     main_test.cpp
 )
 

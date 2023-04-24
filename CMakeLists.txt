@@ -7,7 +7,7 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
 include(CMakeDependentOption)
 include(cmake/CPM.cmake)
 
-CPMAddPackage("gh:jm4R/reactive-cpp#develop")
+CPMAddPackage("gh:jm4R/reactive-cpp#non-lazy")
 
 cmake_dependent_option(CIRCLE_TEST "Generate test target" ON "${PROJECT_IS_TOP_LEVEL}" OFF)
 option(CIRCLE_COVERAGE "Generate the coverage report" OFF)

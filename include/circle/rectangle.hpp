@@ -1,16 +1,10 @@
-#include <circle/reactive/property.hpp>
+#pragma once
+
+#include <circle/item.hpp>
 
 namespace circle
 {
-    class object
-    {
-        virtual bool drawable()
-        {
-            return false;
-        }
-    };
-
-    class anchors : public item
+    class rectangle : public item
     {
     public:
         enum horizontal_mode
@@ -28,9 +22,4 @@ namespace circle
         };
     };
 
-    class item : public object
-    {
-    public:
-        property<item&> parent;
-    };
 }
