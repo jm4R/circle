@@ -1,12 +1,10 @@
 #pragma once
 
 #include <circle/fwd.hpp>
-#include <circle/reactive/observer.hpp>
 #include <circle/reactive/property.hpp>
-#include <circle/reactive/tracking_ptr.hpp>
 
 namespace circle {
-class anchors : public enable_tracking_ptr<anchors>
+class anchors
 {
 public: /*properties*/
     property<unit> left_margin;
@@ -30,21 +28,9 @@ public:
     };
 
     anchors(item_ptr parent);
-    ~anchors() { this->call_before_destroyed(); }
 
-    anchors(anchors&& other) : enable_tracking_ptr{std::move(other)}
-    {
-        this->call_moved();
-    }
-
-    anchors& operator=(anchors&& other)
-    {
-        enable_tracking_ptr::operator=(std::move(other));
-        this->call_moved();
-        return *this;
-    }
-
-    signal<>& value_changed() { return value_changed_; }
+    signal<>& horizontal_changed() { return horizontal_changed_; }
+    signal<>& vertical_changed() { return vertical_changed_; }
 
     // horizontal
     void set(horizontal_mode destination_anchor, item_ptr source_item,
@@ -68,7 +54,8 @@ public:
     void clear();
 
 private:
-    void rebind();
+    void recalculate_horizontal();
+    void recalculate_vertical();
 
 private:
     struct horizontal_entry
@@ -108,7 +95,8 @@ private:
     vertical_entry vertical_center_;
     vertical_entry bottom_;
 
-    signal<> value_changed_;
+    signal<> horizontal_changed_;
+    signal<> vertical_changed_;
 };
 
 } // namespace circle

@@ -121,7 +121,8 @@ TEST_CASE("anchors")
         }
     }
 
-    SECTION("calculate x: as child") {
+    SECTION("calculate x: as child")
+    {
         it.parent = &it50;
 
         SECTION("no horizontal")
@@ -279,98 +280,257 @@ TEST_CASE("anchors")
         }
     }
 
-        SECTION("calculate y: as sibling")
+    SECTION("calculate y: as sibling")
+    {
+        SECTION("no vertical")
         {
-            SECTION("no vertical")
-            {
-                it.y = 1000;
-                REQUIRE(it.y == 1000);
+            it.y = 1000;
+            REQUIRE(it.y == 1000);
 
-                it.anchors.top_margin = 1000;
-                it.anchors.bottom_margin = 10000;
-                REQUIRE(it.y == 1000);
-            }
-
-            SECTION("left")
-            {
-                it.anchors.set_top(&it50, anchors::top);
-                REQUIRE(it.y == 50);
-
-                it.anchors.set_top(&it50, anchors::vertical_center);
-                REQUIRE(it.y == 75);
-
-                it.anchors.set_top(&it50, anchors::bottom);
-                REQUIRE(it.y == 100);
-            }
-
-            SECTION("left with margin")
-            {
-                it.anchors.top_margin = 1000;
-                it.anchors.bottom_margin = 10000;
-
-                it.anchors.set_top(&it50, anchors::top);
-                REQUIRE(it.y == 1050);
-
-                it.anchors.set_top(&it50, anchors::vertical_center);
-                REQUIRE(it.y == 1075);
-
-                it.anchors.set_top(&it50, anchors::bottom);
-                REQUIRE(it.y == 1100);
-            }
-
-            SECTION("horizontal center")
-            {
-                it.anchors.top_margin = 1000;
-                it.anchors.bottom_margin = 10000;
-                it.height = 10;
-
-                it.anchors.set_vertical_center(&it50, anchors::top);
-                REQUIRE(it.y == 45);
-
-                it.anchors.set_vertical_center(&it50,
-                anchors::vertical_center); REQUIRE(it.y == 70);
-
-                it.anchors.set_vertical_center(&it50, anchors::bottom);
-                REQUIRE(it.y == 95);
-            }
-
-            SECTION("right")
-            {
-                it.height = 10;
-
-                it.anchors.set_bottom(&it50, anchors::top);
-                REQUIRE(it.y == 40);
-
-                it.anchors.set_bottom(&it50, anchors::vertical_center);
-                REQUIRE(it.y == 65);
-
-                it.anchors.set_bottom(&it50, anchors::bottom);
-                REQUIRE(it.y == 90);
-            }
-
-            SECTION("right with margin")
-            {
-                it.anchors.top_margin = 1000;
-                it.anchors.bottom_margin = 10000;
-                it.height = 10;
-
-                it.anchors.set_bottom(&it50, anchors::top);
-                REQUIRE(it.y == 40 - 10000);
-
-                it.anchors.set_bottom(&it50, anchors::vertical_center);
-                REQUIRE(it.y == 65 - 10000);
-
-                it.anchors.set_bottom(&it50, anchors::bottom);
-                REQUIRE(it.y == 90 - 10000);
-            }
-
-//            SECTION("dynamic change")
-//            {
-//                it.anchors.set_top(&it50, anchors::vertical_center);
-//                REQUIRE(it.y == 75);
-
-//                it50.height = 1000;
-//                REQUIRE(it.y == 550);
-//            }
+            it.anchors.top_margin = 1000;
+            it.anchors.bottom_margin = 10000;
+            REQUIRE(it.y == 1000);
         }
+
+        SECTION("left")
+        {
+            it.anchors.set_top(&it50, anchors::top);
+            REQUIRE(it.y == 50);
+
+            it.anchors.set_top(&it50, anchors::vertical_center);
+            REQUIRE(it.y == 75);
+
+            it.anchors.set_top(&it50, anchors::bottom);
+            REQUIRE(it.y == 100);
+        }
+
+        SECTION("left with margin")
+        {
+            it.anchors.top_margin = 1000;
+            it.anchors.bottom_margin = 10000;
+
+            it.anchors.set_top(&it50, anchors::top);
+            REQUIRE(it.y == 1050);
+
+            it.anchors.set_top(&it50, anchors::vertical_center);
+            REQUIRE(it.y == 1075);
+
+            it.anchors.set_top(&it50, anchors::bottom);
+            REQUIRE(it.y == 1100);
+        }
+
+        SECTION("horizontal center")
+        {
+            it.anchors.top_margin = 1000;
+            it.anchors.bottom_margin = 10000;
+            it.height = 10;
+
+            it.anchors.set_vertical_center(&it50, anchors::top);
+            REQUIRE(it.y == 45);
+
+            it.anchors.set_vertical_center(&it50, anchors::vertical_center);
+            REQUIRE(it.y == 70);
+
+            it.anchors.set_vertical_center(&it50, anchors::bottom);
+            REQUIRE(it.y == 95);
+        }
+
+        SECTION("right")
+        {
+            it.height = 10;
+
+            it.anchors.set_bottom(&it50, anchors::top);
+            REQUIRE(it.y == 40);
+
+            it.anchors.set_bottom(&it50, anchors::vertical_center);
+            REQUIRE(it.y == 65);
+
+            it.anchors.set_bottom(&it50, anchors::bottom);
+            REQUIRE(it.y == 90);
+        }
+
+        SECTION("right with margin")
+        {
+            it.anchors.top_margin = 1000;
+            it.anchors.bottom_margin = 10000;
+            it.height = 10;
+
+            it.anchors.set_bottom(&it50, anchors::top);
+            REQUIRE(it.y == 40 - 10000);
+
+            it.anchors.set_bottom(&it50, anchors::vertical_center);
+            REQUIRE(it.y == 65 - 10000);
+
+            it.anchors.set_bottom(&it50, anchors::bottom);
+            REQUIRE(it.y == 90 - 10000);
+        }
+
+        SECTION("dynamic change")
+        {
+            it.anchors.set_top(&it50, anchors::vertical_center);
+            REQUIRE(it.y == 75);
+
+            it50.height = 1000;
+            REQUIRE(it.y == 550);
+        }
+    }
+
+    SECTION("calculate y: as child")
+    {
+        it.parent = &it50;
+
+        SECTION("no vertical")
+        {
+            it.y = 1000;
+            REQUIRE(it.y == 1000);
+
+            it.anchors.top_margin = 1000;
+            it.anchors.bottom_margin = 10000;
+            REQUIRE(it.y == 1000);
+        }
+
+        SECTION("top")
+        {
+            it.anchors.set_top(&it50, anchors::top);
+            REQUIRE(it.y == 0);
+
+            it.anchors.set_top(&it50, anchors::vertical_center);
+            REQUIRE(it.y == 25);
+
+            it.anchors.set_top(&it50, anchors::bottom);
+            REQUIRE(it.y == 50);
+        }
+
+        SECTION("top with margin")
+        {
+            it.anchors.top_margin = 1000;
+            it.anchors.bottom_margin = 10000;
+
+            it.anchors.set_top(&it50, anchors::top);
+            REQUIRE(it.y == 1000);
+
+            it.anchors.set_top(&it50, anchors::vertical_center);
+            REQUIRE(it.y == 1025);
+
+            it.anchors.set_top(&it50, anchors::bottom);
+            REQUIRE(it.y == 1050);
+        }
+
+        SECTION("vertical center")
+        {
+            it.anchors.top_margin = 1000;
+            it.anchors.bottom_margin = 10000;
+            it.height = 10;
+
+            it.anchors.set_vertical_center(&it50, anchors::top);
+            REQUIRE(it.y == -5);
+
+            it.anchors.set_vertical_center(&it50, anchors::vertical_center);
+            REQUIRE(it.y == 20);
+
+            it.anchors.set_vertical_center(&it50, anchors::bottom);
+            REQUIRE(it.y == 45);
+        }
+
+        SECTION("bottom")
+        {
+            it.height = 10;
+
+            it.anchors.set_bottom(&it50, anchors::top);
+            REQUIRE(it.y == -10);
+
+            it.anchors.set_bottom(&it50, anchors::vertical_center);
+            REQUIRE(it.y == 15);
+
+            it.anchors.set_bottom(&it50, anchors::bottom);
+            REQUIRE(it.y == 40);
+        }
+
+        SECTION("bottom with margin")
+        {
+            it.anchors.top_margin = 1000;
+            it.anchors.bottom_margin = 10000;
+            it.height = 10;
+
+            it.anchors.set_bottom(&it50, anchors::top);
+            REQUIRE(it.y == -10 - 10000);
+
+            it.anchors.set_bottom(&it50, anchors::vertical_center);
+            REQUIRE(it.y == 15 - 10000);
+
+            it.anchors.set_bottom(&it50, anchors::bottom);
+            REQUIRE(it.y == 40 - 10000);
+        }
+
+        SECTION("dynamic change")
+        {
+            it.anchors.set_top(&it50, anchors::vertical_center);
+            REQUIRE(it.y == 25);
+
+            it50.height = 1000;
+            REQUIRE(it.y == 500);
+        }
+    }
+
+    SECTION("calculate height")
+    {
+        SECTION("no vertical")
+        {
+            it.height = 1000;
+            REQUIRE(it.height == 1000);
+        }
+
+        SECTION("top")
+        {
+            it.height = 1000;
+            it.anchors.set_top(&it50, anchors::top);
+            REQUIRE(it.height == 1000);
+        }
+
+        SECTION("vertical center")
+        {
+            it.height = 1000;
+            it.anchors.set_vertical_center(&it50, anchors::top);
+            REQUIRE(it.height == 1000);
+        }
+
+        SECTION("bottom")
+        {
+            it.height = 1000;
+            it.anchors.set_bottom(&it50, anchors::top);
+            REQUIRE(it.height == 1000);
+        }
+
+        SECTION("top & bottom")
+        {
+            it.height = 1000;
+            it.anchors.set_top(&it50, anchors::top);
+            it.anchors.set_bottom(&it50, anchors::top);
+            REQUIRE(it.height == 0);
+
+            it.anchors.set_bottom(&it50, anchors::vertical_center);
+            REQUIRE(it.height == 25);
+
+            it.anchors.set_bottom(&it50, anchors::bottom);
+            REQUIRE(it.height == 50);
+
+            it.anchors.set_top(&it50, anchors::vertical_center);
+            REQUIRE(it.height == 25);
+
+            it.anchors.set_top(&it50, anchors::bottom);
+            REQUIRE(it.height == 0);
+        }
+
+        // other configurations are UB
+
+        SECTION("dynamic change")
+        {
+            it.anchors.set_top(&it50, anchors::top);
+            it.anchors.set_bottom(&it50, anchors::bottom);
+            REQUIRE(it.height == 50);
+
+            it50.height = 1000;
+            REQUIRE(it.height == 1000);
+        }
+    }
 }

@@ -16,14 +16,51 @@ bool isset(T& anchor)
 
 anchors::anchors(item_ptr parent) : item_{std::move(parent)}
 {
-    left_margin.value_changed().connect([this] { rebind(); });
-    right_margin.value_changed().connect([this] { rebind(); });
-    top_margin.value_changed().connect([this] { rebind(); });
-    bottom_margin.value_changed().connect([this] { rebind(); });
-    item_->x.value_changed().connect([this] { if (!overrides_x()) value_changed_(); });
-    item_->y.value_changed().connect([this] { if (!overrides_y()) value_changed_(); });
-    item_->width.value_changed().connect([this] { if (!overrides_width()) value_changed_(); });
-    item_->height.value_changed().connect([this] { if (!overrides_height()) value_changed_(); });
+    left_margin.value_changed().connect([this] { recalculate_horizontal(); });
+    right_margin.value_changed().connect([this] { recalculate_horizontal(); });
+    item_->x.value_changed().connect([this] {
+        if (overrides_x())
+        {
+            recalculate_horizontal();
+        }
+        else
+        {
+            horizontal_changed_();
+        }
+    });
+    item_->width.value_changed().connect([this] {
+        if (overrides_width())
+        {
+            recalculate_horizontal();
+        }
+        else
+        {
+            horizontal_changed_();
+        }
+    });
+
+    top_margin.value_changed().connect([this] { recalculate_vertical(); });
+    bottom_margin.value_changed().connect([this] { recalculate_vertical(); });
+    item_->y.value_changed().connect([this] {
+        if (overrides_y())
+        {
+            recalculate_vertical();
+        }
+        else
+        {
+            vertical_changed_();
+        }
+    });
+    item_->height.value_changed().connect([this] {
+        if (overrides_height())
+        {
+            recalculate_vertical();
+        }
+        else
+        {
+            vertical_changed_();
+        }
+    });
 }
 
 void anchors::set(horizontal_mode destination_anchor, item_ptr source_item,
@@ -50,9 +87,10 @@ void anchors::set_left(item_ptr source_item, horizontal_mode source_anchor)
               "the same time");
     left_.item = std::move(source_item);
     left_.mode = source_anchor;
-    left_.item->anchors.value_changed().connect([this] { value_changed_(); });
+    left_.item->anchors.horizontal_changed().connect(
+        [this] { recalculate_horizontal(); });
 
-    rebind();
+    recalculate_horizontal();
 }
 
 void anchors::set_horizontal_center(item_ptr source_item,
@@ -63,10 +101,10 @@ void anchors::set_horizontal_center(item_ptr source_item,
               "the same time");
     horizontal_center_.item = std::move(source_item);
     horizontal_center_.mode = source_anchor;
-    horizontal_center_.item->anchors.value_changed().connect(
-        [this] { value_changed_(); });
+    horizontal_center_.item->anchors.horizontal_changed().connect(
+        [this] { recalculate_horizontal(); });
 
-    rebind();
+    recalculate_horizontal();
 }
 
 void anchors::set_right(item_ptr source_item, horizontal_mode source_anchor)
@@ -76,9 +114,10 @@ void anchors::set_right(item_ptr source_item, horizontal_mode source_anchor)
               "the same time");
     right_.item = std::move(source_item);
     right_.mode = source_anchor;
-    right_.item->anchors.value_changed().connect([this] { value_changed_(); });
+    right_.item->anchors.horizontal_changed().connect(
+        [this] { recalculate_horizontal(); });
 
-    rebind();
+    recalculate_horizontal();
 }
 
 void anchors::set(vertical_mode destination_anchor, item_ptr source_item,
@@ -105,9 +144,10 @@ void anchors::set_top(item_ptr source_item, vertical_mode source_anchor)
               "same time");
     top_.item = std::move(source_item);
     top_.mode = source_anchor;
-    top_.item->anchors.value_changed().connect([this] { value_changed_(); });
+    top_.item->anchors.vertical_changed().connect(
+        [this] { recalculate_vertical(); });
 
-    rebind();
+    recalculate_vertical();
 }
 
 void anchors::set_vertical_center(item_ptr source_item,
@@ -118,10 +158,10 @@ void anchors::set_vertical_center(item_ptr source_item,
               "the same time");
     vertical_center_.item = std::move(source_item);
     vertical_center_.mode = source_anchor;
-    vertical_center_.item->anchors.value_changed().connect(
-        [this] { value_changed_(); });
+    vertical_center_.item->anchors.vertical_changed().connect(
+        [this] { recalculate_vertical(); });
 
-    rebind();
+    recalculate_vertical();
 }
 
 void anchors::set_bottom(item_ptr source_item, vertical_mode source_anchor)
@@ -131,9 +171,10 @@ void anchors::set_bottom(item_ptr source_item, vertical_mode source_anchor)
               "the same time");
     bottom_.item = std::move(source_item);
     bottom_.mode = source_anchor;
-    bottom_.item->anchors.value_changed().connect([this] { value_changed_(); });
+    bottom_.item->anchors.vertical_changed().connect(
+        [this] { recalculate_vertical(); });
 
-    rebind();
+    recalculate_vertical();
 }
 
 void anchors::fill(item_ptr source_item)
@@ -163,33 +204,34 @@ void anchors::clear()
     bottom_ = {};
 }
 
-void anchors::rebind()
+void anchors::recalculate_horizontal()
 {
     if (overrides_x())
     {
-        auto tracking_this = tracking_ptr{this};
-        item_->x = BIND(tracking_this, tracking_this.calc_x());
-    }
-
-    if (overrides_y())
-    {
-        auto tracking_this = tracking_ptr{this};
-        item_->y = BIND(tracking_this, tracking_this.calc_y());
+        item_->x = calc_x();
     }
 
     if (overrides_width())
     {
-        auto tracking_this = tracking_ptr{this};
-        item_->width = BIND(tracking_this, tracking_this.calc_width());
+        item_->width = calc_width();
+    }
+
+    horizontal_changed_();
+}
+
+void anchors::recalculate_vertical()
+{
+    if (overrides_y())
+    {
+        item_->y = calc_y();
     }
 
     if (overrides_height())
     {
-        auto tracking_this = tracking_ptr{this};
-        item_->height = BIND(tracking_this, tracking_this.calc_height());
+        item_->height = calc_height();
     }
 
-    // value_changed_();
+    vertical_changed_();
 }
 
 void anchors::assert_precondition(item_ptr& it) const
@@ -227,9 +269,9 @@ unit anchors::calc_y(vertical_entry entry) const
     case anchors::top:
         return y;
     case anchors::vertical_center:
-        return y + entry.item->width / 2;
+        return y + entry.item->height / 2;
     case anchors::bottom:
-        return y + entry.item->width;
+        return y + entry.item->height;
     }
 
     return {};
@@ -278,7 +320,7 @@ unit anchors::calc_y() const
     else if (isset(vertical_center_))
         return calc_y(vertical_center_) - item_->height / 2;
     else
-        return item_->x;
+        return item_->y;
 }
 
 unit anchors::calc_width() const
@@ -297,7 +339,16 @@ unit anchors::calc_width() const
 
 unit anchors::calc_height() const
 {
-    return 0;
+    unit res{};
+    if (isset(top_) && isset(bottom_))
+    {
+        res = calc_y(bottom_) - calc_y(top_) - top_margin - bottom_margin;
+    }
+    else
+    {
+        return item_->height;
+    }
+    return res > 0 ? res : 0;
 }
 
 } // namespace circle
