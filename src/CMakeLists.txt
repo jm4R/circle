@@ -2,15 +2,32 @@ set(circle_include_dir ${circle_SOURCE_DIR}/include/circle)
 
 add_library(circle-core STATIC
     anchors.cpp
+    application.cpp
     item.cpp
     object.cpp
     rectangle.cpp
+    window.cpp
+
+    utils/font_database.cpp
+
+    private/draw_engine.cpp
+    private/standard_fonts/Roboto-Bold.ttf.cpp
+    private/standard_fonts/Roboto-BoldItalic.ttf.cpp
+    private/standard_fonts/Roboto-Italic.ttf.cpp
+    private/standard_fonts/Roboto-Regular.ttf.cpp
+    private/standard_fonts/standard_fonts.hpp
 
     ${circle_include_dir}/anchors.hpp
+    ${circle_include_dir}/application.hpp
+    ${circle_include_dir}/fwd.hpp
     ${circle_include_dir}/item.hpp
     ${circle_include_dir}/object.hpp
     ${circle_include_dir}/rectangle.hpp
-    ${circle_include_dir}/fwd.hpp
+    ${circle_include_dir}/window.hpp
+
+    ${circle_include_dir}/utils/font_database.hpp
+
+    ${circle_include_dir}/private/draw_engine.hpp   # TODO: remove private header from include dir
 )
 
 target_include_directories(circle-core SYSTEM PUBLIC
@@ -27,6 +44,9 @@ target_compile_features(circle-core PUBLIC
 
 target_link_libraries(circle-core PUBLIC
     circle::reactive
+    SDL2
+    ${SDL2TTF_LIBRARY}
+    Freetype::Freetype
 )
 
 add_library(circle::core ALIAS circle-core)

@@ -4,6 +4,10 @@
 #include <circle/reactive/property.hpp>
 
 namespace circle {
+
+class item;
+using item_ptr = circle::tracking_ptr<item>;
+
 class anchors
 {
 public: /*properties*/

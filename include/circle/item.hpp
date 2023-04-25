@@ -7,6 +7,10 @@
 #include <circle/reactive/bind.hpp>
 
 namespace circle {
+
+class item;
+using item_ptr = circle::tracking_ptr<item>;
+
 class item : public object, public enable_tracking_ptr<item>
 {
 public:

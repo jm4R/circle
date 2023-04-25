@@ -8,6 +8,9 @@ include(CMakeDependentOption)
 include(cmake/CPM.cmake)
 
 CPMAddPackage("gh:jm4R/reactive-cpp#non-lazy")
+find_package(SDL2 REQUIRED)
+find_package(SDL2TTF REQUIRED)
+find_package(Freetype REQUIRED) # only needed if using static SDL2TTF version
 
 cmake_dependent_option(CIRCLE_TEST "Generate test target" ON "${PROJECT_IS_TOP_LEVEL}" OFF)
 option(CIRCLE_COVERAGE "Generate the coverage report" OFF)
@@ -21,3 +24,5 @@ add_subdirectory(src)
 if (CIRCLE_TEST)
     add_subdirectory(test)
 endif()
+
+add_subdirectory(examples/demo)
