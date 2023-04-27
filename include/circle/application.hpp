@@ -2,17 +2,13 @@
 
 #include <circle/fwd.hpp>
 #include <circle/utils/font_database.hpp>
+#include <circle/utils/sdl_utils.hpp>
 
 #include <vector>
 
 #include <vector>
 
 namespace circle {
-
-namespace engine {
-struct resize_event;    // TODO: temp
-struct quit_event;
-} // namespace engine
 
 class application_base
 {
@@ -34,9 +30,8 @@ public:
 
     font_database& fonts();
 
-private:
-    void handle_event(const engine::resize_event& event);
-    void handle_event(const engine::quit_event& event);
+protected:
+    void handle_event(const sdl::event& ev);
 
 private:
     font_database fonts_;

@@ -1,6 +1,8 @@
 #include <circle/application.hpp>
 
-#include <circle/private/draw_engine.hpp>
+#include <circle/window.hpp>
+
+#include "private/circle_sdl.hpp"
 #include "private/standard_fonts/standard_fonts.hpp"
 
 #include <cassert>
@@ -14,12 +16,12 @@ application_base::application_base()
     assert(!once_guard);
     once_guard = true;
 
-    engine::init_engine();
+    sdl::init_engine();
 }
 
 application_base::~application_base()
 {
-    engine::destroy_engine();
+    sdl::destroy_engine();
 }
 
 application::application()
@@ -38,16 +40,20 @@ application::~application()
 
 int application::exec()
 {
-    while(!quit_){
-        auto ev = engine::wait_for_event();
-        std::visit([this](const auto& e) { handle_event(e); }, ev);
+    while (!quit_)
+    {
+        sdl::event ev;
+        sdl::event_wait(ev);
+        handle_event(ev);
     }
     return 0;
 }
 
 void application::quit()
 {
-    quit_ = true; // FIXME push it to event queue
+    sdl::event ev{};
+    ev.type = SDL_QUIT;
+    sdl::event_push(ev);
 }
 
 font_database& application::fonts()
@@ -55,14 +61,17 @@ font_database& application::fonts()
     return fonts_;
 }
 
-void application::handle_event(const engine::resize_event &event)
+void application::handle_event(const sdl::event& ev)
 {
+    if (ev.type == SDL_QUIT)
+    {
+        quit_ = true;
+    }
 
-}
-
-void application::handle_event(const engine::quit_event &event)
-{
-    quit_ = true;
+    for (auto* w : windows_)
+    {
+        w->handle_event(ev);
+    }
 }
 
 } // namespace circle

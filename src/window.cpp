@@ -1,8 +1,8 @@
 #include <circle/window.hpp>
 
-#include <circle/private/draw_engine.hpp>
-
 #include <circle/application.hpp>
+
+#include "private/circle_sdl.hpp"
 
 #include <algorithm>
 #include <cassert>
@@ -13,16 +13,10 @@ window::window(unsigned w, unsigned h) : w_{w}, h_{h}
 {
     assert(app);
 
-    engine::window_init(ctx_, w_, h_);
-    engine::set_color(ctx_, 0xff, 0xff, 0xff, 0xff);
-    engine::clear(ctx_);
-    //content_item_.set_ctx(&ctx_);
-    engine::set_event_handler(
-        ctx_,
-        [](void* data, const engine::event& ev) {
-            static_cast<window*>(data)->handle_event(ev);
-        },
-        this);
+    sdl::window_init(ctx_, w_, h_);
+    sdl::set_color(ctx_, 0xff, 0xff, 0xff, 0xff);
+    sdl::clear(ctx_);
+    // content_item_.set_ctx(&ctx_);
 
     content_item().width = w;
     content_item().height = h;
@@ -35,7 +29,7 @@ window::~window()
     app->windows_.erase(
         std::remove(app->windows_.begin(), app->windows_.end(), this),
         app->windows_.end());
-    engine::window_destroy(ctx_);
+    sdl::window_destroy(ctx_);
 }
 
 item& window::content_item()
@@ -45,32 +39,58 @@ item& window::content_item()
 
 void window::show()
 {
-    engine::window_show(ctx_, true);
+    sdl::window_show(ctx_, true);
     update();
 }
 
 void window::update()
 {
     redraw();
-    engine::flush(ctx_);
+    sdl::flush(ctx_);
+}
+
+void window::handle_event(const sdl::event& ev)
+{
+    if (ev.type == SDL_WINDOWEVENT)
+    {
+        if (ctx_.id != ev.window.windowID)
+            return;
+
+        switch (ev.window.event)
+        {
+        case SDL_WINDOWEVENT_RESIZED:
+        case SDL_WINDOWEVENT_SIZE_CHANGED:
+            on_resized(ev.window.data1, ev.window.data2);
+        case SDL_WINDOWEVENT_SHOWN:
+        case SDL_WINDOWEVENT_HIDDEN:
+        case SDL_WINDOWEVENT_EXPOSED:
+        case SDL_WINDOWEVENT_MOVED:
+        case SDL_WINDOWEVENT_MINIMIZED:
+        case SDL_WINDOWEVENT_MAXIMIZED:
+        case SDL_WINDOWEVENT_RESTORED:
+        case SDL_WINDOWEVENT_ENTER:
+        case SDL_WINDOWEVENT_LEAVE:
+        case SDL_WINDOWEVENT_FOCUS_GAINED:
+        case SDL_WINDOWEVENT_FOCUS_LOST:
+        case SDL_WINDOWEVENT_CLOSE:
+        case SDL_WINDOWEVENT_TAKE_FOCUS:
+        case SDL_WINDOWEVENT_HIT_TEST:
+            break;
+        }
+    }
 }
 
 void window::redraw()
 {
-    engine::set_color(ctx_, 0xff, 0xff, 0xff, 0xff);
-    engine::clear(ctx_);
-    //content_item().render();
+    sdl::set_color(ctx_, 0xff, 0xff, 0xff, 0xff);
+    sdl::clear(ctx_);
+    // content_item().render();
 }
 
-void window::handle_event(const engine::event& event)
+void window::on_resized(int w, int h)
 {
-    std::visit([this](const auto& e) { handle_event(e); }, event);
-}
-
-void window::handle_event(const engine::resize_event& event)
-{
-    w_ = event.width;
-    h_ = event.height;
+    w_ = w;
+    h_ = h;
     content_item().width = w_;
     content_item().height = h_;
     update();

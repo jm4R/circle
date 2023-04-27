@@ -9,8 +9,9 @@ add_library(circle-core STATIC
     window.cpp
 
     utils/font_database.cpp
+    utils/sdl_utils.cpp
 
-    private/draw_engine.cpp
+    private/circle_sdl.hpp private/circle_sdl.cpp
     private/standard_fonts/Roboto-Bold.ttf.cpp
     private/standard_fonts/Roboto-BoldItalic.ttf.cpp
     private/standard_fonts/Roboto-Italic.ttf.cpp
@@ -26,8 +27,7 @@ add_library(circle-core STATIC
     ${circle_include_dir}/window.hpp
 
     ${circle_include_dir}/utils/font_database.hpp
-
-    ${circle_include_dir}/private/draw_engine.hpp   # TODO: remove private header from include dir
+    ${circle_include_dir}/utils/sdl_utils.hpp
 )
 
 target_include_directories(circle-core SYSTEM PUBLIC

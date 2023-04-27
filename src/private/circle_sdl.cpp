@@ -1,11 +1,12 @@
-#include <circle/private/draw_engine.hpp>
+#include "circle_sdl.hpp"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
-#define SDL_LINE_DRAWING_BUG (SDL_MAJOR_VERSION == 2 && SDL_MINOR_VERSION == 0 && SDL_PATCHLEVEL < 14)
+#define SDL_LINE_DRAWING_BUG                                                   \
+    (SDL_MAJOR_VERSION == 2 && SDL_MINOR_VERSION == 0 && SDL_PATCHLEVEL < 14)
 #if SDL_LINE_DRAWING_BUG
-#warning "There is some serious bug in used SDL version"
+#    warning "There is some serious bug in used SDL version"
 #endif
 
 #include <algorithm>
@@ -13,21 +14,9 @@
 #include <functional>
 #include <unordered_map>
 
-namespace circle::engine {
+namespace circle::sdl {
 
 namespace {
-
-struct events_map
-{
-    bool registered{};
-    struct handler_data
-    {
-        event_handler fun;
-        void* data;
-    };
-
-    std::unordered_map<Uint32, handler_data> windows_handlers;
-};
 
 SDL_Renderer* renderer(context& ctx)
 {
@@ -59,7 +48,17 @@ bool is_init(context& ctx) noexcept
     return ctx.renderer != nullptr;
 }
 
-long window_init(window_context& ctx, unsigned w, unsigned h)
+void event_wait(event& ev)
+{
+    SDL_WaitEvent(&ev);
+}
+
+void event_push(event ev)
+{
+    SDL_PushEvent(&ev);
+}
+
+void window_init(window_context& ctx, unsigned w, unsigned h)
 {
     ctx.window = SDL_CreateWindow("circle", SDL_WINDOWPOS_UNDEFINED,
                                   SDL_WINDOWPOS_UNDEFINED, w, h,
@@ -80,7 +79,7 @@ long window_init(window_context& ctx, unsigned w, unsigned h)
 
     SDL_SetRenderDrawBlendMode(ctx.renderer, SDL_BLENDMODE_BLEND);
 
-    return SDL_GetWindowID(ctx.window);
+    ctx.id = SDL_GetWindowID(ctx.window);
 }
 
 void window_destroy(window_context& ctx) noexcept
@@ -98,7 +97,7 @@ void window_show(window_context& ctx, bool show) noexcept
         SDL_HideWindow(ctx.window);
 }
 
-void texture_init(context& ctx, window_context& window, unit w, unit h) noexcept
+void texture_init(context& ctx, window_context& window, int w, int h) noexcept
 {
     ctx.renderer = window.renderer;
     ctx.texture = SDL_CreateTexture(ctx.renderer, SDL_PIXELFORMAT_RGBA32,
@@ -112,7 +111,7 @@ void texture_destroy(context& ctx) noexcept
     ctx.renderer = nullptr;
 }
 
-size texture_size(context &ctx) noexcept
+size texture_size(context& ctx) noexcept
 {
     size res{};
     Uint32 ignored;
@@ -121,13 +120,13 @@ size texture_size(context &ctx) noexcept
     return res;
 }
 
-void font_init(font_context& font, const char* path, unit size) noexcept
+void font_init(font_context& font, const char* path, int size) noexcept
 {
     font.font = TTF_OpenFont(path, size);
 }
 
 void font_init_from_memory(font_context& font, const std::byte* data,
-                           std::size_t data_length, unit size) noexcept
+                           std::size_t data_length, int size) noexcept
 {
     const auto memory = SDL_RWFromConstMem(data, data_length);
     font.font = TTF_OpenFontRW(memory, true, size);
@@ -146,17 +145,17 @@ font_style font_set_style(font_context& font, font_style flags) noexcept
     return static_cast<font_style>(TTF_GetFontStyle(font.font));
 }
 
-unit font_get_line_height(font_context& font)
+int font_get_line_height(font_context& font)
 {
     return TTF_FontHeight(font.font);
 }
 
-unit font_get_line_skip(font_context& font)
+int font_get_line_skip(font_context& font)
 {
     return TTF_FontLineSkip(font.font);
 }
 
-unit font_get_text_width(font_context& font, const char* text)
+int font_get_text_width(font_context& font, const char* text)
 {
     int w{};
     int h{};
@@ -172,59 +171,6 @@ const char* font_get_family_name(font_context& font)
 const char* font_get_style_name(font_context& font)
 {
     return TTF_FontFaceStyleName(font.font);
-}
-
-void set_event_handler(window_context& ctx,
-                       void (*handler)(void*, const event&),
-                       void* user_data) noexcept
-{
-    static events_map map;
-
-    map.windows_handlers[SDL_GetWindowID(ctx.window)] = {handler, user_data};
-
-    if (!map.registered)
-    {
-        map.registered = true;
-        SDL_AddEventWatch(
-            [](void* data, SDL_Event* ev) {
-                if (!ev)
-                    return 0;
-                if (ev->type == SDL_WINDOWEVENT)
-                {
-                    const auto it =
-                        map.windows_handlers.find(ev->window.windowID);
-                    if (it == map.windows_handlers.end())
-                        return 0;
-                    switch (ev->window.event)
-                    {
-                    case SDL_WINDOWEVENT_RESIZED:
-                    case SDL_WINDOWEVENT_SIZE_CHANGED:
-                        it->second.fun(
-                            it->second.data,
-                            resize_event{ev->window.windowID, ev->window.data1, ev->window.data2});
-                        break;
-                    case SDL_WINDOWEVENT_SHOWN:
-                    case SDL_WINDOWEVENT_HIDDEN:
-                    case SDL_WINDOWEVENT_EXPOSED:
-                    case SDL_WINDOWEVENT_MOVED:
-                    case SDL_WINDOWEVENT_MINIMIZED:
-                    case SDL_WINDOWEVENT_MAXIMIZED:
-                    case SDL_WINDOWEVENT_RESTORED:
-                    case SDL_WINDOWEVENT_ENTER:
-                    case SDL_WINDOWEVENT_LEAVE:
-                    case SDL_WINDOWEVENT_FOCUS_GAINED:
-                    case SDL_WINDOWEVENT_FOCUS_LOST:
-                    case SDL_WINDOWEVENT_CLOSE:
-                    case SDL_WINDOWEVENT_TAKE_FOCUS:
-                    case SDL_WINDOWEVENT_HIT_TEST:
-                        break;
-                    }
-                }
-
-                return 0;
-            },
-            user_data);
-    }
 }
 
 void flush(context& ctx) noexcept
@@ -250,21 +196,20 @@ void set_color(context& ctx, std::uint8_t r, std::uint8_t g, std::uint8_t b,
     SDL_SetRenderDrawColor(renderer(ctx), r, g, b, a);
 }
 
-void draw_rectangle(context& ctx, unit x, unit y, unit w, unit h) noexcept
+void draw_rectangle(context& ctx, int x, int y, int w, int h) noexcept
 {
     SDL_Rect rect{x, y, w, h};
     SDL_RenderDrawRect(renderer(ctx), &rect);
 }
 
-void draw_rectangle_filled(context& ctx, unit x, unit y, unit w,
-                           unit h) noexcept
+void draw_rectangle_filled(context& ctx, int x, int y, int w, int h) noexcept
 {
     SDL_Rect rect{x, y, w, h};
     SDL_RenderFillRect(renderer(ctx), &rect);
 }
 
-void draw_rectangle_filled_rounded(context& ctx, unit x, unit y, unit w, unit h,
-                                   unit r, bool antialiasing) noexcept
+void draw_rectangle_filled_rounded(context& ctx, int x, int y, int w, int h,
+                                   int r, bool antialiasing) noexcept
 {
     assert(w >= 0);
     assert(h >= 0);
@@ -281,8 +226,8 @@ void draw_rectangle_filled_rounded(context& ctx, unit x, unit y, unit w, unit h,
     draw_rectangle_filled(ctx, x + r, y, w - 2 * r, h);
     draw_rectangle_filled(ctx, x, y + r, w, h - 2 * r);
 
-    unit ly = r;
-    unit lx;
+    int ly = r;
+    int lx;
 
     std::uint8_t cr, cg, cb, ca;
     SDL_GetRenderDrawColor(ctx.renderer, &cr, &cg, &cb, &ca);
@@ -325,10 +270,10 @@ void draw_rectangle_filled_rounded(context& ctx, unit x, unit y, unit w, unit h,
     SDL_SetRenderDrawColor(ren, cr, cg, cb, ca);
 }
 
-void draw_gradient(context& ctx, unit x, unit y, unit w, unit h,
-                   std::uint8_t r1, std::uint8_t g1, std::uint8_t b1,
-                   std::uint8_t a1, std::uint8_t r2, std::uint8_t g2,
-                   std::uint8_t b2, std::uint8_t a2, bool vertical) noexcept
+void draw_gradient(context& ctx, int x, int y, int w, int h, std::uint8_t r1,
+                   std::uint8_t g1, std::uint8_t b1, std::uint8_t a1,
+                   std::uint8_t r2, std::uint8_t g2, std::uint8_t b2,
+                   std::uint8_t a2, bool vertical) noexcept
 {
     SDL_Surface* surface = SDL_CreateRGBSurfaceWithFormat(
         0, vertical ? 1 : w, vertical ? h : 1, 32, SDL_PIXELFORMAT_RGBA32);
@@ -362,8 +307,8 @@ void draw_texture(context& dst, context& src) noexcept
     SDL_RenderCopy(renderer(dst), src.texture, nullptr, nullptr);
 }
 
-void draw_texture(context& dst, context& src, unit dstx, unit dsty, unit dstw,
-                  unit dsth) noexcept
+void draw_texture(context& dst, context& src, int dstx, int dsty, int dstw,
+                  int dsth) noexcept
 {
     SDL_Rect r{dstx, dsty, dstw, dsth};
     SDL_SetTextureBlendMode(src.texture, SDL_BLENDMODE_BLEND);
@@ -384,7 +329,7 @@ void apply_alpha_mask(context& dst, context& src) noexcept
 }
 
 void draw_text_line(context& ctx, const font_context& font, const char* text,
-                    unit x, unit y, unit w, unit h) noexcept
+                    int x, int y, int w, int h) noexcept
 {
     if (w == 0)
         w = 0xffff;
@@ -404,59 +349,4 @@ void draw_text_line(context& ctx, const font_context& font, const char* text,
     SDL_DestroyTexture(t);
 }
 
-event wait_for_event()
-{
-    SDL_Event ev;
-
-    for(;;) {
-        SDL_WaitEvent(&ev);
-
-        if (ev.type == SDL_WINDOWEVENT)
-        {
-            switch (ev.window.event)
-            {
-            case SDL_WINDOWEVENT_RESIZED:
-            case SDL_WINDOWEVENT_SIZE_CHANGED:
-                return resize_event{ev.window.windowID, ev.window.data1,
-                                    ev.window.data2};
-            case SDL_WINDOWEVENT_SHOWN:
-            case SDL_WINDOWEVENT_HIDDEN:
-            case SDL_WINDOWEVENT_EXPOSED:
-            case SDL_WINDOWEVENT_MOVED:
-            case SDL_WINDOWEVENT_MINIMIZED:
-            case SDL_WINDOWEVENT_MAXIMIZED:
-            case SDL_WINDOWEVENT_RESTORED:
-            case SDL_WINDOWEVENT_ENTER:
-            case SDL_WINDOWEVENT_LEAVE:
-            case SDL_WINDOWEVENT_FOCUS_GAINED:
-            case SDL_WINDOWEVENT_FOCUS_LOST:
-            case SDL_WINDOWEVENT_CLOSE:
-            case SDL_WINDOWEVENT_TAKE_FOCUS:
-            case SDL_WINDOWEVENT_HIT_TEST:
-                break;
-            }
-        } else if (ev.type == SDL_QUIT)
-        {
-            return quit_event{};
-        }
-    }
-}
-
-template<class... Ts> struct overload : Ts... { using Ts::operator()...; };
-template<class... Ts> overload(Ts...) -> overload<Ts...>;
-
-void post_event(event event)
-{
-    SDL_Event ev
-        = std::visit(
-            overload{[](resize_event) { return SDL_Event{SDL_QUIT}; },
-                     [](auto v) {
-                         assert(false); /*posting other event types not supported*/
-                         return SDL_Event{};
-                     }},
-            event);
-    const auto res = SDL_PushEvent(&ev);
-    assert(res);
-}
-
-} // namespace circle::engine
+} // namespace circle::sdl

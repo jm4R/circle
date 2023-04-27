@@ -2,14 +2,14 @@
 
 #include <circle/item.hpp>
 
-#include <circle/private/draw_engine.hpp> // FIXME: remove private header
+#include <circle/utils/sdl_utils.hpp>
 
 namespace circle {
 
 class window
 {
 public:
-    window(unsigned w = 600, unsigned h = 400);
+    window(unsigned w = 600, unsigned h = 800);
     ~window();
 
     window& operator=(const window&) = delete;
@@ -20,15 +20,19 @@ public:
     void update();
 
 protected:
+    void handle_event(const sdl::event& event);
     void redraw();
-    void handle_event(const engine::event& event);
-    void handle_event(const engine::resize_event& event);
 
 private:
-    engine::window_context ctx_;
+    void on_resized(int w, int h);
+
+private:
+    sdl::window_context ctx_;
     item content_item_;
-    unsigned w_{};
+    unsigned w_{};  // TODO: property
     unsigned h_{};
+
+    friend class ::circle::application;
 };
 
 } // namespace circle
