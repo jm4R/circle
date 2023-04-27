@@ -38,7 +38,7 @@ void window_destroy(window_context& ctx) noexcept;
 void window_show(window_context& ctx, bool show) noexcept;
 
 // texture
-void texture_init(context& ctx, window_context& window, int w, int h) noexcept;
+void texture_init(context& ctx, context& src_context, int w, int h) noexcept;
 void texture_destroy(context& ctx) noexcept;
 size texture_size(context& ctx) noexcept;
 

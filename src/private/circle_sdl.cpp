@@ -97,9 +97,9 @@ void window_show(window_context& ctx, bool show) noexcept
         SDL_HideWindow(ctx.window);
 }
 
-void texture_init(context& ctx, window_context& window, int w, int h) noexcept
+void texture_init(context& ctx, context& src_context, int w, int h) noexcept
 {
-    ctx.renderer = window.renderer;
+    ctx.renderer = src_context.renderer;
     ctx.texture = SDL_CreateTexture(ctx.renderer, SDL_PIXELFORMAT_RGBA32,
                                     SDL_TEXTUREACCESS_TARGET, w, h);
     SDL_SetTextureBlendMode(ctx.texture, SDL_BLENDMODE_BLEND);

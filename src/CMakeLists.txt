@@ -3,6 +3,8 @@ set(circle_include_dir ${circle_SOURCE_DIR}/include/circle)
 add_library(circle-core STATIC
     anchors.cpp
     application.cpp
+    color.cpp
+    gradient.cpp
     item.cpp
     object.cpp
     rectangle.cpp
@@ -20,7 +22,9 @@ add_library(circle-core STATIC
 
     ${circle_include_dir}/anchors.hpp
     ${circle_include_dir}/application.hpp
+    ${circle_include_dir}/color.hpp
     ${circle_include_dir}/fwd.hpp
+    ${circle_include_dir}/gradient.hpp
     ${circle_include_dir}/item.hpp
     ${circle_include_dir}/object.hpp
     ${circle_include_dir}/rectangle.hpp

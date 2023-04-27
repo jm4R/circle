@@ -15,6 +15,7 @@ public: /*properties*/
     property<unit> right_margin;
     property<unit> top_margin;
     property<unit> bottom_margin;
+    property<unit> margins;
 
 public:
     enum horizontal_mode

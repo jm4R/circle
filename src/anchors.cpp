@@ -16,6 +16,12 @@ bool isset(T& anchor)
 
 anchors::anchors(item_ptr parent) : item_{std::move(parent)}
 {
+    margins.value_changed().connect([this](unit v) {
+        left_margin = v;
+        right_margin = v;
+        top_margin = v;
+        bottom_margin = v;
+    });
     left_margin.value_changed().connect([this] { recalculate_horizontal(); });
     right_margin.value_changed().connect([this] { recalculate_horizontal(); });
     item_->x.value_changed().connect([this] {

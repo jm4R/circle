@@ -1,6 +1,7 @@
 #include <circle/window.hpp>
 
 #include <circle/application.hpp>
+#include <circle/reactive/bind.hpp>
 
 #include "private/circle_sdl.hpp"
 
@@ -9,17 +10,15 @@
 
 namespace circle {
 
-window::window(unsigned w, unsigned h) : w_{w}, h_{h}
+window::window(unsigned w, unsigned h) : width{unit(w)}, height{unit(h)}
 {
     assert(app);
 
-    sdl::window_init(ctx_, w_, h_);
+    sdl::window_init(ctx_, width, height);
     sdl::set_color(ctx_, 0xff, 0xff, 0xff, 0xff);
     sdl::clear(ctx_);
-    // content_item_.set_ctx(&ctx_);
-
-    content_item().width = w;
-    content_item().height = h;
+    content_item.width = BIND(width, width);
+    content_item.height = BIND(height, height);
 
     app->windows_.push_back(this);
 }
@@ -32,11 +31,6 @@ window::~window()
     sdl::window_destroy(ctx_);
 }
 
-item& window::content_item()
-{
-    return content_item_;
-}
-
 void window::show()
 {
     sdl::window_show(ctx_, true);
@@ -45,7 +39,7 @@ void window::show()
 
 void window::update()
 {
-    redraw();
+    redraw(); // TODO: do not redraw directly, mark dirty and limit fps
     sdl::flush(ctx_);
 }
 
@@ -84,15 +78,13 @@ void window::redraw()
 {
     sdl::set_color(ctx_, 0xff, 0xff, 0xff, 0xff);
     sdl::clear(ctx_);
-    // content_item().render();
+    content_item.render(ctx_);
 }
 
 void window::on_resized(int w, int h)
 {
-    w_ = w;
-    h_ = h;
-    content_item().width = w_;
-    content_item().height = h_;
+    width = w;
+    height = h;
     update();
 }
 
