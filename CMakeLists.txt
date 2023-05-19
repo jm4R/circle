@@ -30,3 +30,4 @@ if (CIRCLE_TEST)
 endif()
 
 add_subdirectory(examples/demo)
+add_subdirectory(examples/demo-declarative)

@@ -13,8 +13,11 @@ public: /*properties*/
     property<unit> left_padding;
     property<unit> right_padding;
     property<unit> bottom_padding;
+    property<unit> padding;
 
 public:
+    explicit row();
+
     using item::add;
     void add(item_ptr child) override;
 

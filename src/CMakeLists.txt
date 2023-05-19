@@ -26,6 +26,7 @@ add_library(circle-core STATIC
     ${circle_include_dir}/application.hpp
     ${circle_include_dir}/color.hpp
     ${circle_include_dir}/column.hpp
+    ${circle_include_dir}/declarative.hpp
     ${circle_include_dir}/fwd.hpp
     ${circle_include_dir}/gradient.hpp
     ${circle_include_dir}/item.hpp

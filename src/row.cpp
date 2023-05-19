@@ -4,6 +4,16 @@ namespace circle {
 
 void row::draw(sdl::context ctx) {}
 
+row::row()
+{
+    padding.value_changed().connect([this](unit val) {
+        left_padding = val;
+        right_padding = val;
+        top_padding = val;
+        bottom_padding = val;
+    });
+}
+
 void row::add(item_ptr child)
 {
     class anchors& anch = child->anchors;

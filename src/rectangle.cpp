@@ -66,7 +66,7 @@ void rectangle::draw_gradient_vertical(sdl::context& ctx, unit x, unit y)
         sdl::set_color(ctx, prev_stop.color.r, prev_stop.color.g,
                           prev_stop.color.b, prev_stop.color.a);
         sdl::draw_rectangle_filled(ctx, x, y + h * prev_stop.position, w,
-                                      h - h * prev_stop.position);
+                                   h - h * prev_stop.position + 1);
     }
 }
 
@@ -112,7 +112,7 @@ void rectangle::draw_gradient_horizontal(sdl::context& ctx, unit x, unit y)
         sdl::set_color(ctx, prev_stop.color.r, prev_stop.color.g,
                           prev_stop.color.b, prev_stop.color.a);
         sdl::draw_rectangle_filled(ctx, x + w * prev_stop.position, y,
-                                      w - w * prev_stop.position, h);
+                                   w - w * prev_stop.position + 1, h);
     }
 }
 
