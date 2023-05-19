@@ -4,13 +4,17 @@ project(circle VERSION 0.1 LANGUAGES CXX)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
 
+if (EMSCRIPTEN)
+    list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake/emscripten-adapters)
+endif()
+
 include(CMakeDependentOption)
 include(cmake/CPM.cmake)
 
-CPMAddPackage("gh:jm4R/reactive-cpp#non-lazy")
+CPMAddPackage("gh:jm4R/reactive-cpp#master")
 find_package(SDL2 REQUIRED)
-find_package(SDL2TTF REQUIRED)
-find_package(Freetype REQUIRED) # only needed if using static SDL2TTF version
+find_package(SDL2_image REQUIRED)
+find_package(SDL2_ttf REQUIRED)
 
 cmake_dependent_option(CIRCLE_TEST "Generate test target" ON "${PROJECT_IS_TOP_LEVEL}" OFF)
 option(CIRCLE_COVERAGE "Generate the coverage report" OFF)

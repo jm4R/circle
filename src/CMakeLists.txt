@@ -48,9 +48,12 @@ target_compile_features(circle-core PUBLIC
 
 target_link_libraries(circle-core PUBLIC
     circle::reactive
-    SDL2
-    ${SDL2TTF_LIBRARY}
-    Freetype::Freetype
+    SDL2::SDL2
+    SDL2_ttf::SDL2_ttf
 )
+
+if (EMSCRIPTEN)
+    target_link_options(circle-core PUBLIC "-sASYNCIFY")
+endif()
 
 add_library(circle::core ALIAS circle-core)

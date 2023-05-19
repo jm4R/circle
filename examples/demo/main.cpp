@@ -1,4 +1,5 @@
 #include <circle/application.hpp>
+#include <circle/reactive/bind.hpp>
 #include <circle/rectangle.hpp>
 #include <circle/window.hpp>
 
@@ -20,8 +21,7 @@ int main(int argc, char* args[])
     r2.anchors.fill(&r1);
     r2.anchors.set_right(&r1, anchors::horizontal_center);
     r2.anchors.margins = 30;
-    auto& rh = r2.height;
-    r2.radius = BIND(rh, rh / 3);
+    r2.radius = BIND((r2.height, rh), rh / 3);
     r2.gradient = gradient{gradient::vertical,
                            {
                                gradient_stop{0, 0xe6c47e},

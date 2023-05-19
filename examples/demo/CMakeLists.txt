@@ -8,3 +8,10 @@ target_sources(circle-demo PRIVATE
 target_link_libraries(circle-demo PUBLIC
     circle::core
 )
+
+if (EMSCRIPTEN)
+    set_target_properties(circle-demo
+        PROPERTIES
+            SUFFIX ".html"
+    )
+endif()
