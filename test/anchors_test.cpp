@@ -215,6 +215,13 @@ TEST_CASE("anchors")
 
             it50.width = 1000;
             REQUIRE(it.x == 500);
+
+            property<unit> some = 1000;
+            it50.width = BIND(some, some);
+            REQUIRE(it.x == 500);
+
+            some = 2000;
+            REQUIRE(it.x == 1000);
         }
     }
 
@@ -277,6 +284,13 @@ TEST_CASE("anchors")
 
             it50.width = 1000;
             REQUIRE(it.width == 1000);
+
+            property<unit> some = 1000;
+            it50.width = BIND(some, some);
+            REQUIRE(it.width == 1000);
+
+            some = 2000;
+            REQUIRE(it.width == 2000);
         }
     }
 
@@ -372,6 +386,13 @@ TEST_CASE("anchors")
 
             it50.height = 1000;
             REQUIRE(it.y == 550);
+
+            property<unit> some = 1000;
+            it50.height = BIND(some, some);
+            REQUIRE(it.y == 550);
+
+            some = 2000;
+            REQUIRE(it.y == 1050);
         }
     }
 
@@ -469,6 +490,13 @@ TEST_CASE("anchors")
 
             it50.height = 1000;
             REQUIRE(it.y == 500);
+
+            property<unit> some = 1000;
+            it50.height = BIND(some, some);
+            REQUIRE(it.y == 500);
+
+            some = 2000;
+            REQUIRE(it.y == 1000);
         }
     }
 
@@ -531,6 +559,13 @@ TEST_CASE("anchors")
 
             it50.height = 1000;
             REQUIRE(it.height == 1000);
+
+            property<unit> some = 1000;
+            it50.height = BIND(some, some);
+            REQUIRE(it.height == 1000);
+
+            some = 2000;
+            REQUIRE(it.height == 2000);
         }
     }
 }

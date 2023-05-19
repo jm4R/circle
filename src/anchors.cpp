@@ -212,39 +212,50 @@ void anchors::clear()
 
 void anchors::recalculate_horizontal()
 {
-    if (overrides_x())
+    bool changed = false;
+
+    if (overrides_x() && item_->x.assign(calc_x()))
     {
-        item_->x = calc_x();
+        changed = true;
     }
 
-    if (overrides_width())
+    if (overrides_width() && item_->width.assign(calc_width()))
     {
-        item_->width = calc_width();
+        changed = true;
     }
 
-    horizontal_changed_();
+    if (changed)
+    {
+        horizontal_changed_();
+    }
 }
 
 void anchors::recalculate_vertical()
 {
-    if (overrides_y())
+    bool changed = false;
+
+    if (overrides_y() && item_->y.assign(calc_y()))
     {
-        item_->y = calc_y();
+        changed = true;
     }
 
-    if (overrides_height())
+    if (overrides_height() && item_->height.assign(calc_height()))
     {
-        item_->height = calc_height();
+        changed = true;
     }
 
-    vertical_changed_();
+    if (changed)
+    {
+        vertical_changed_();
+    }
 }
 
 void anchors::assert_precondition(item_ptr& it) const
 {
     // For performance reasons, you can only anchor an item to its siblings and
     // direct parent.
-    assert(!!it && item_->parent == it || item_->parent == it->parent);
+    assert(!!it && it != item_ && item_->parent == it ||
+           item_->parent == it->parent);
 }
 
 unit anchors::calc_x(horizontal_entry entry) const
