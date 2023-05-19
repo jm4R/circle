@@ -118,6 +118,13 @@ TEST_CASE("anchors")
 
             it50.width = 1000;
             REQUIRE(it.x == 550);
+
+            property<unit> some = 1000;
+            it50.width = BIND(some, some);
+            REQUIRE(it.x == 550);
+
+            some = 2000;
+            REQUIRE(it.x == 1050);
         }
     }
 
