@@ -9,6 +9,7 @@ add_library(circle-core STATIC
     item.cpp
     object.cpp
     rectangle.cpp
+    row.cpp
     window.cpp
 
     utils/font_database.cpp
@@ -30,6 +31,7 @@ add_library(circle-core STATIC
     ${circle_include_dir}/item.hpp
     ${circle_include_dir}/object.hpp
     ${circle_include_dir}/rectangle.hpp
+    ${circle_include_dir}/row.hpp
     ${circle_include_dir}/window.hpp
 
     ${circle_include_dir}/utils/font_database.hpp

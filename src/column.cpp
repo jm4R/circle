@@ -1,7 +1,5 @@
 #include <circle/column.hpp>
 
-#include <private/circle_sdl.hpp>
-
 namespace circle {
 
 void column::draw(sdl::context ctx) {}
