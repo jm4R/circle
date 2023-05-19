@@ -30,7 +30,7 @@ public:
     item(item&& other);
     item& operator=(item&& other);
 
-    void add(item_ptr child);
+    virtual void add(item_ptr child);
 
     template <typename T>
     T& add()
@@ -41,6 +41,8 @@ public:
         owning_items_.push_back(std::move(ptr));
         return *raw_ptr;
     }
+
+    std::vector<item_ptr>& children() { return children_; }
 
     void render(sdl::context& ctx);
 

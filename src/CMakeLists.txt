@@ -4,6 +4,7 @@ add_library(circle-core STATIC
     anchors.cpp
     application.cpp
     color.cpp
+    column.cpp
     gradient.cpp
     item.cpp
     object.cpp
@@ -23,6 +24,7 @@ add_library(circle-core STATIC
     ${circle_include_dir}/anchors.hpp
     ${circle_include_dir}/application.hpp
     ${circle_include_dir}/color.hpp
+    ${circle_include_dir}/column.hpp
     ${circle_include_dir}/fwd.hpp
     ${circle_include_dir}/gradient.hpp
     ${circle_include_dir}/item.hpp
