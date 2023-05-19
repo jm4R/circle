@@ -17,9 +17,12 @@ COMPONENT_BEGIN(rectangle, dot)
 }
 COMPONENT_END;
 
-const auto dice_gradient =
-    gradient{gradient::vertical,
-             {gradient_stop{0, 0xe0e0e0}, gradient_stop{0.8, 0xc0c0c0}, gradient_stop{0.95, 0x909090}}};
+const auto dice_gradient = gradient{gradient::vertical,
+                                    {
+                                        {0.0, 0xe0e0e0},
+                                        {0.8, 0xc0c0c0},
+                                        {0.95, 0x909090},
+                                    }};
 
 COMPONENT_BEGIN(rectangle, dice)
 {
@@ -30,15 +33,14 @@ COMPONENT_BEGIN(rectangle, dice)
 }
 COMPONENT_END;
 
-
 COMPONENT_BEGIN(rectangle, panel)
 {
     SET(color, 0x800020);
 
     CHILD(rectangle, area1)
     {
-        anchors.set_left(area1.parent, anchors::left);
-        anchors.set_right(area1.parent, anchors::right);
+        anchors.set_left(&parent, anchors::left);
+        anchors.set_right(&parent, anchors::right);
         SET(height, 134);
         SET(color, 0xa00020);
 
@@ -51,7 +53,7 @@ COMPONENT_BEGIN(rectangle, panel)
             {
                 CHILD(dot, d1)
                 {
-                    anchors.center_in(&dice1);
+                    anchors.center_in(dice1);
                 }
             }
 
@@ -59,15 +61,15 @@ COMPONENT_BEGIN(rectangle, panel)
             {
                 CHILD(dot, d1)
                 {
-                    anchors.set_left(&dice2, anchors::left);
-                    anchors.set_bottom(&dice2, anchors::bottom);
+                    anchors.set_left(dice2, anchors::left);
+                    anchors.set_bottom(dice2, anchors::bottom);
                     anchors.margins = 14;
                 }
 
                 CHILD(dot, d2)
                 {
-                    anchors.set_right(&dice2, anchors::right);
-                    anchors.set_top(&dice2, anchors::top);
+                    anchors.set_right(dice2, anchors::right);
+                    anchors.set_top(dice2, anchors::top);
                     anchors.margins = 14;
                 }
             }
@@ -76,21 +78,21 @@ COMPONENT_BEGIN(rectangle, panel)
             {
                 CHILD(dot, d1)
                 {
-                    anchors.set_left(&dice3, anchors::left);
-                    anchors.set_bottom(&dice3, anchors::bottom);
+                    anchors.set_left(dice3, anchors::left);
+                    anchors.set_bottom(dice3, anchors::bottom);
                     anchors.margins = 14;
                 }
 
                 CHILD(dot, d2)
                 {
-                    anchors.set_right(&dice3, anchors::right);
-                    anchors.set_top(&dice3, anchors::top);
+                    anchors.set_right(dice3, anchors::right);
+                    anchors.set_top(dice3, anchors::top);
                     anchors.margins = 14;
                 }
 
                 CHILD(dot, d3)
                 {
-                    anchors.center_in(&dice3);
+                    anchors.center_in(dice3);
                 }
             }
 
@@ -98,29 +100,29 @@ COMPONENT_BEGIN(rectangle, panel)
             {
                 CHILD(dot, d1)
                 {
-                    anchors.set_left(&dice4, anchors::left);
-                    anchors.set_bottom(&dice4, anchors::bottom);
+                    anchors.set_left(dice4, anchors::left);
+                    anchors.set_bottom(dice4, anchors::bottom);
                     anchors.margins = 14;
                 }
 
                 CHILD(dot, d2)
                 {
-                    anchors.set_right(&dice4, anchors::right);
-                    anchors.set_top(&dice4, anchors::top);
+                    anchors.set_right(dice4, anchors::right);
+                    anchors.set_top(dice4, anchors::top);
                     anchors.margins = 14;
                 }
 
                 CHILD(dot, d3)
                 {
-                    anchors.set_left(&dice4, anchors::left);
-                    anchors.set_top(&dice4, anchors::top);
+                    anchors.set_left(dice4, anchors::left);
+                    anchors.set_top(dice4, anchors::top);
                     anchors.margins = 14;
                 }
 
                 CHILD(dot, d4)
                 {
-                    anchors.set_right(&dice4, anchors::right);
-                    anchors.set_bottom(&dice4, anchors::bottom);
+                    anchors.set_right(dice4, anchors::right);
+                    anchors.set_bottom(dice4, anchors::bottom);
                     anchors.margins = 14;
                 }
             }
@@ -129,35 +131,35 @@ COMPONENT_BEGIN(rectangle, panel)
             {
                 CHILD(dot, d1)
                 {
-                    anchors.set_left(&dice5, anchors::left);
-                    anchors.set_bottom(&dice5, anchors::bottom);
+                    anchors.set_left(dice5, anchors::left);
+                    anchors.set_bottom(dice5, anchors::bottom);
                     anchors.margins = 14;
                 }
 
                 CHILD(dot, d2)
                 {
-                    anchors.set_right(&dice5, anchors::right);
-                    anchors.set_top(&dice5, anchors::top);
+                    anchors.set_right(dice5, anchors::right);
+                    anchors.set_top(dice5, anchors::top);
                     anchors.margins = 14;
                 }
 
                 CHILD(dot, d3)
                 {
-                    anchors.set_left(&dice5, anchors::left);
-                    anchors.set_top(&dice5, anchors::top);
+                    anchors.set_left(dice5, anchors::left);
+                    anchors.set_top(dice5, anchors::top);
                     anchors.margins = 14;
                 }
 
                 CHILD(dot, d4)
                 {
-                    anchors.set_right(&dice5, anchors::right);
-                    anchors.set_bottom(&dice5, anchors::bottom);
+                    anchors.set_right(dice5, anchors::right);
+                    anchors.set_bottom(dice5, anchors::bottom);
                     anchors.margins = 14;
                 }
 
                 CHILD(dot, d5)
                 {
-                    anchors.center_in(&dice5);
+                    anchors.center_in(dice5);
                 }
             }
 
@@ -165,43 +167,45 @@ COMPONENT_BEGIN(rectangle, panel)
             {
                 CHILD(dot, d1)
                 {
-                    anchors.set_left(&dice6, anchors::left);
-                    anchors.set_bottom(&dice6, anchors::bottom);
+                    anchors.set_left(dice6, anchors::left);
+                    anchors.set_bottom(dice6, anchors::bottom);
                     anchors.margins = 14;
                 }
 
                 CHILD(dot, d2)
                 {
-                    anchors.set_right(&dice6, anchors::right);
-                    anchors.set_top(&dice6, anchors::top);
+                    anchors.set_right(dice6, anchors::right);
+                    anchors.set_top(dice6, anchors::top);
                     anchors.margins = 14;
                 }
 
                 CHILD(dot, d3)
                 {
-                    anchors.set_left(&dice6, anchors::left);
-                    anchors.set_top(&dice6, anchors::top);
+                    anchors.set_left(dice6, anchors::left);
+                    anchors.set_top(dice6, anchors::top);
                     anchors.margins = 14;
                 }
 
                 CHILD(dot, d4)
                 {
-                    anchors.set_right(&dice6, anchors::right);
-                    anchors.set_bottom(&dice6, anchors::bottom);
+                    anchors.set_right(dice6, anchors::right);
+                    anchors.set_bottom(dice6, anchors::bottom);
                     anchors.margins = 14;
                 }
 
                 CHILD(dot, d5)
                 {
-                    anchors.set_left(&dice6, anchors::left);
-                    anchors.set_vertical_center(&dice6, anchors::vertical_center);
+                    anchors.set_left(dice6, anchors::left);
+                    anchors.set_vertical_center(dice6,
+                                                anchors::vertical_center);
                     anchors.margins = 14;
                 }
 
                 CHILD(dot, d6)
                 {
-                    anchors.set_right(&dice6, anchors::right);
-                    anchors.set_vertical_center(&dice6, anchors::vertical_center);
+                    anchors.set_right(dice6, anchors::right);
+                    anchors.set_vertical_center(dice6,
+                                                anchors::vertical_center);
                     anchors.margins = 14;
                 }
             }
@@ -218,7 +222,7 @@ int main(int argc, char* args[])
     application app;
     window window{800, 400};
 
-           // rectangle
+    // rectangle
     auto& r1 = window.content_item.add<panel>();
     r1.anchors.fill(r1.parent);
 

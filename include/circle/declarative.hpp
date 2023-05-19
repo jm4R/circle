@@ -25,9 +25,19 @@ struct declarative_build_context
     }                                                                          \
     ;
 
+// TODO: experiment, make context available
+#define COMPONENT(base, name)                                                  \
+    class name : public base                                                   \
+    {                                                                          \
+    public:                                                                    \
+        explicit name();                                                       \
+    };                                                                         \
+    inline name::name()
+
 #define SET(propname, value) c_working_obj.propname = value
 
 #define CHILD(type, name)                                                      \
     if (type& name = c_working_obj.add<type>(); &name)                         \
-        if (type& c_working_obj = name; &c_working_obj)                        \
-            if (circle::anchors& anchors = name.anchors; &anchors)
+        if (auto& parent = c_working_obj; &parent)                             \
+            if (type& c_working_obj = name; &c_working_obj)                    \
+                if (circle::anchors& anchors = name.anchors; &anchors)
