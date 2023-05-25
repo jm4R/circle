@@ -4,6 +4,7 @@
 #include <circle/rectangle.hpp>
 #include <circle/row.hpp>
 #include <circle/window.hpp>
+#include <circle/mouse_area.hpp>
 
 int main(int argc, char* args[])
 
@@ -34,6 +35,12 @@ int main(int argc, char* args[])
                                gradient_stop{0.82, 0x7a4b1e},
                                gradient_stop{1, 0x996632},
                            }};
+
+    auto& mouse = r2.add<mouse_area>();
+    mouse.anchors.fill(r2);
+
+    r1.color =
+        BIND((mouse.contains_press, cm), color{cm ? 0x800020u : 0xff0020u});
 
     // item
     auto& it1 = r1.add<item>();

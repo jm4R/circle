@@ -5,6 +5,7 @@
 #include <circle/rectangle.hpp>
 #include <circle/row.hpp>
 #include <circle/window.hpp>
+#include <circle/mouse_area.hpp>
 
 using namespace circle;
 
@@ -23,13 +24,23 @@ const auto dice_gradient = gradient{gradient::vertical,
                                         {0.8, 0xc0c0c0},
                                         {0.95, 0x909090},
                                     }};
+const auto dice_gradient_hover = gradient{gradient::vertical,
+                                    {
+                                     {0.0, 0xffffff},
+                                     {0.8, 0xdddddd},
+                                     {0.95, 0xcccccc},
+                                     }};
 
 COMPONENT_BEGIN(rectangle, dice)
 {
     SET(width, 114);
     SET(height, 114);
     SET(radius, 10);
-    SET(gradient, dice_gradient);
+    CHILD(mouse_area, mouse)
+    {
+        anchors.fill(parent);
+    }
+    gradient = BIND((mouse->contains_mouse, cm), cm ? dice_gradient_hover : dice_gradient);
 }
 COMPONENT_END;
 

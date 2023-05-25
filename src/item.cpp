@@ -43,9 +43,25 @@ void item::render(sdl::context& ctx)
     }
 }
 
+void item::propagate_event(const sdl::event& ev)
+{
+    if (enabled)
+    {
+        handle_event(ev);
+
+        for (auto& child : children_)
+            child->propagate_event(ev);
+    }
+}
+
 void item::draw(sdl::context ctx)
 {
     // item doesn't have visual representation
+}
+
+void item::handle_event(const sdl::event& ev)
+{
+    // item doesn't use events
 }
 
 } // namespace circle

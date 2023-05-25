@@ -45,8 +45,9 @@ void window::update()
 
 void window::handle_event(const sdl::event& ev)
 {
-    if (ev.type == SDL_WINDOWEVENT)
+    switch (ev.type)
     {
+    case SDL_WINDOWEVENT:
         if (ctx_.id != ev.window.windowID)
             return;
 
@@ -71,6 +72,20 @@ void window::handle_event(const sdl::event& ev)
         case SDL_WINDOWEVENT_HIT_TEST:
             break;
         }
+        break;
+    case SDL_MOUSEMOTION:
+        if (ctx_.id != ev.motion.windowID)
+            return;
+        content_item.propagate_event(ev);
+        update();
+        break;
+    case SDL_MOUSEBUTTONDOWN:
+    case SDL_MOUSEBUTTONUP:
+        if (ctx_.id != ev.button.windowID)
+            return;
+        content_item.propagate_event(ev);
+        update();
+        break;
     }
 }
 

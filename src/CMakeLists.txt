@@ -7,6 +7,7 @@ add_library(circle-core STATIC
     column.cpp
     gradient.cpp
     item.cpp
+    mouse_area.cpp
     object.cpp
     rectangle.cpp
     row.cpp
@@ -30,6 +31,7 @@ add_library(circle-core STATIC
     ${circle_include_dir}/fwd.hpp
     ${circle_include_dir}/gradient.hpp
     ${circle_include_dir}/item.hpp
+    ${circle_include_dir}/mouse_area.hpp
     ${circle_include_dir}/object.hpp
     ${circle_include_dir}/rectangle.hpp
     ${circle_include_dir}/row.hpp

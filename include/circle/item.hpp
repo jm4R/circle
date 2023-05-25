@@ -21,6 +21,7 @@ public: /*properties*/
     property<unit> width;
     property<unit> height;
     property<bool> visible{true};
+    property<bool> enabled{true};
     circle::anchors anchors;
 
 public:
@@ -45,9 +46,11 @@ public:
     std::vector<item_ptr>& children() { return children_; }
 
     void render(sdl::context& ctx);
+    void propagate_event(const sdl::event& ev);
 
 protected:
     virtual void draw(sdl::context ctx);
+    virtual void handle_event(const sdl::event& ev);
 
 protected:
     unit render_x() const
