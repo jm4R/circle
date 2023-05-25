@@ -120,7 +120,7 @@ TEST_CASE("anchors")
             REQUIRE(it.x == 550);
 
             property<unit> some = 1000;
-            it50.width = BIND(some, some);
+            it50.width = BIND_EQ(some);
             REQUIRE(it.x == 550);
 
             some = 2000;
@@ -224,7 +224,7 @@ TEST_CASE("anchors")
             REQUIRE(it.x == 500);
 
             property<unit> some = 1000;
-            it50.width = BIND(some, some);
+            it50.width = BIND_EQ(some);
             REQUIRE(it.x == 500);
 
             some = 2000;
@@ -293,7 +293,7 @@ TEST_CASE("anchors")
             REQUIRE(it.width == 1000);
 
             property<unit> some = 1000;
-            it50.width = BIND(some, some);
+            it50.width = BIND_EQ(some);
             REQUIRE(it.width == 1000);
 
             some = 2000;
@@ -395,7 +395,7 @@ TEST_CASE("anchors")
             REQUIRE(it.y == 550);
 
             property<unit> some = 1000;
-            it50.height = BIND(some, some);
+            it50.height = BIND_EQ(some);
             REQUIRE(it.y == 550);
 
             some = 2000;
@@ -499,7 +499,7 @@ TEST_CASE("anchors")
             REQUIRE(it.y == 500);
 
             property<unit> some = 1000;
-            it50.height = BIND(some, some);
+            it50.height = BIND_EQ(some);
             REQUIRE(it.y == 500);
 
             some = 2000;
@@ -568,7 +568,7 @@ TEST_CASE("anchors")
             REQUIRE(it.height == 1000);
 
             property<unit> some = 1000;
-            it50.height = BIND(some, some);
+            it50.height = BIND_EQ(some);
             REQUIRE(it.height == 1000);
 
             some = 2000;

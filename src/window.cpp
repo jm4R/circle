@@ -17,8 +17,8 @@ window::window(unsigned w, unsigned h) : width{unit(w)}, height{unit(h)}
     sdl::window_init(ctx_, width, height);
     sdl::set_color(ctx_, 0xff, 0xff, 0xff, 0xff);
     sdl::clear(ctx_);
-    content_item.width = BIND(width, width);
-    content_item.height = BIND(height, height);
+    content_item.width = BIND_EQ(width);
+    content_item.height = BIND_EQ(height);
 
     app->windows_.push_back(this);
 }

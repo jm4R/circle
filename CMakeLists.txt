@@ -11,7 +11,7 @@ endif()
 include(CMakeDependentOption)
 include(cmake/CPM.cmake)
 
-CPMAddPackage("gh:jm4R/reactive-cpp#master")
+CPMAddPackage("gh:jm4R/reactive-cpp#develop")
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
 find_package(SDL2_ttf REQUIRED)

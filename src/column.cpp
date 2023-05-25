@@ -26,17 +26,17 @@ void column::add(item_ptr child)
     if (before)
     {
         anch.set_top(before, anchors::bottom);
-        anch.top_margin = BIND(spacing, spacing);
+        anch.top_margin = BIND_EQ(spacing);
     }
     else
     {
         anch.set_top(this, anchors::top);
-        anch.top_margin = BIND(top_padding, top_padding);
+        anch.top_margin = BIND_EQ(top_padding);
     }
     anch.set_left(this, anchors::left);
-    anch.left_margin = BIND(left_padding, left_padding);
-    anch.right_margin = BIND(right_padding, right_padding);
-    anch.bottom_margin = BIND(bottom_padding, bottom_padding);
+    anch.left_margin = BIND_EQ(left_padding);
+    anch.right_margin = BIND_EQ(right_padding);
+    anch.bottom_margin = BIND_EQ(bottom_padding);
 }
 
 } // namespace circle
