@@ -1,10 +1,11 @@
 #include <circle/application.hpp>
 #include <circle/column.hpp>
+#include <circle/image.hpp>
+#include <circle/mouse_area.hpp>
 #include <circle/reactive/bind.hpp>
 #include <circle/rectangle.hpp>
 #include <circle/row.hpp>
 #include <circle/window.hpp>
-#include <circle/mouse_area.hpp>
 
 int main(int argc, char* args[])
 
@@ -78,6 +79,9 @@ int main(int argc, char* args[])
         rr.left_padding = 4;
         rr.spacing = 1;
     }
+
+    image& img = window.content_item.add<image>();
+    img.source = "test.png";
 
     window.show();
     app.exec();

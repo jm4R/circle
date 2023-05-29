@@ -6,6 +6,7 @@ add_library(circle-core STATIC
     color.cpp
     column.cpp
     gradient.cpp
+    image.cpp
     item.cpp
     mouse_area.cpp
     object.cpp
@@ -30,6 +31,7 @@ add_library(circle-core STATIC
     ${circle_include_dir}/declarative.hpp
     ${circle_include_dir}/fwd.hpp
     ${circle_include_dir}/gradient.hpp
+    ${circle_include_dir}/image.hpp
     ${circle_include_dir}/item.hpp
     ${circle_include_dir}/mouse_area.hpp
     ${circle_include_dir}/object.hpp
@@ -56,6 +58,7 @@ target_compile_features(circle-core PUBLIC
 target_link_libraries(circle-core PUBLIC
     circle::reactive
     SDL2::SDL2
+    SDL2_image::SDL2_image
     SDL2_ttf::SDL2_ttf
 )
 

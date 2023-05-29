@@ -42,6 +42,9 @@ void texture_init(context& ctx, context& src_context, int w, int h) noexcept;
 void texture_destroy(context& ctx) noexcept;
 size texture_size(context& ctx) noexcept;
 
+// image
+void image_init(context& ctx, context& src_context, const char* file_path) noexcept;
+
 // font
 void font_init(font_context& font, const char* path, int size) noexcept;
 void font_init_from_memory(font_context& font, const std::byte* data,

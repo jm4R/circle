@@ -1,11 +1,12 @@
 #include <circle/application.hpp>
 #include <circle/column.hpp>
 #include <circle/declarative.hpp>
+#include <circle/image.hpp>
+#include <circle/mouse_area.hpp>
 #include <circle/reactive/bind.hpp>
 #include <circle/rectangle.hpp>
 #include <circle/row.hpp>
 #include <circle/window.hpp>
-#include <circle/mouse_area.hpp>
 
 using namespace circle;
 
@@ -219,6 +220,11 @@ COMPONENT_BEGIN(rectangle, panel)
                                                 anchors::vertical_center);
                     anchors.margins = 14;
                 }
+            }
+
+            CHILD(image, img)
+            {
+                SET(source, "test.png");
             }
         }
     }

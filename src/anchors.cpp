@@ -16,6 +16,7 @@ bool isset(T& anchor)
 
 anchors::anchors(item_ptr parent) : item_{std::move(parent)}
 {
+    // TODO: don't capture this
     margins.value_changed().connect([this](unit v) {
         left_margin = v;
         right_margin = v;

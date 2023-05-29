@@ -6,6 +6,7 @@ void column::draw(sdl::context ctx) {}
 
 column::column()
 {
+    // TODO: don't capture this
     padding.value_changed().connect([this](unit val){
         left_padding = val;
         right_padding = val;

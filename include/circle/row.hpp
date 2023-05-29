@@ -1,7 +1,5 @@
 #pragma once
 
-#include <circle/color.hpp>
-#include <circle/gradient.hpp>
 #include <circle/item.hpp>
 
 namespace circle {

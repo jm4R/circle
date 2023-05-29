@@ -2,6 +2,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_image.h>
 
 #define SDL_LINE_DRAWING_BUG                                                   \
     (SDL_MAJOR_VERSION == 2 && SDL_MINOR_VERSION == 0 && SDL_PATCHLEVEL < 14)
@@ -118,6 +119,12 @@ size texture_size(context& ctx) noexcept
     int ignored2;
     SDL_QueryTexture(ctx.texture, &ignored, &ignored2, &res.w, &res.h);
     return res;
+}
+
+void image_init(context& ctx, context& src_context, const char* file_path) noexcept
+{
+    ctx.renderer = src_context.renderer;
+    ctx.texture = IMG_LoadTexture(ctx.renderer, file_path);
 }
 
 void font_init(font_context& font, const char* path, int size) noexcept
