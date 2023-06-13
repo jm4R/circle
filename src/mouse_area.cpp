@@ -4,9 +4,7 @@
 
 namespace circle {
 
-} // namespace circle
-
-void circle::mouse_area::handle_event(const sdl::event& ev)
+void mouse_area::handle_event(const sdl::event& ev)
 {
     Sint32 mx, my;
     if (ev.type == SDL_MOUSEMOTION)
@@ -20,6 +18,10 @@ void circle::mouse_area::handle_event(const sdl::event& ev)
     else if (ev.type == SDL_MOUSEBUTTONDOWN || ev.type == SDL_MOUSEBUTTONUP)
     {
         pressed = ev.button.state == SDL_PRESSED;
+        if (!pressed)
+            clicked();
     }
     contains_press = contains_mouse && pressed;
 }
+
+} // namespace circle

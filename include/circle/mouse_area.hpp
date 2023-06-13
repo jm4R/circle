@@ -10,6 +10,8 @@ public: /*properties*/
     property<bool> pressed;
     property<bool> contains_press;
 
+    signal<> clicked;
+
 protected:
     void handle_event(const sdl::event& ev) override;
 };
