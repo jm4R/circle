@@ -67,10 +67,10 @@ private:                                                                       \
 #define SET_BIND(propname, ...) c_working_obj.propname = BIND(__VA_ARGS__)
 
 #define CHILD(type, name)                                                      \
-    type* name =                                                               \
-        &c_get_declared_or_add<struct c_##name##_tag, type>(c_working_obj);    \
-    if (auto& parent = c_working_obj; &parent)                                 \
-        if (type& c_working_obj = *name; &c_working_obj)                       \
-            if (::circle::anchors& anchors = c_working_obj.anchors; &anchors)
+  type *name =                                                                 \
+      &c_get_declared_or_add<struct c_##name##_tag, type>(c_working_obj);      \
+  if (auto &parent = *name->parent; true)                                      \
+    if (type &c_working_obj = *name; true)                                     \
+      if (::circle::anchors &anchors = c_working_obj.anchors; true)
 
 #define END ; // just to make clang-format happy
