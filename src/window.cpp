@@ -56,9 +56,13 @@ void window::handle_event(const sdl::event& ev)
         case SDL_WINDOWEVENT_RESIZED:
         case SDL_WINDOWEVENT_SIZE_CHANGED:
             on_resized(ev.window.data1, ev.window.data2);
+            break;
         case SDL_WINDOWEVENT_SHOWN:
         case SDL_WINDOWEVENT_HIDDEN:
+            break;
         case SDL_WINDOWEVENT_EXPOSED:
+            update();
+            break;
         case SDL_WINDOWEVENT_MOVED:
         case SDL_WINDOWEVENT_MINIMIZED:
         case SDL_WINDOWEVENT_MAXIMIZED:
