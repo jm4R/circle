@@ -10,14 +10,17 @@
 
 using namespace circle;
 
-COMPONENT_BEGIN(rectangle, dot)
+COMPONENT(rectangle, dot)
 {
-    SET(width, 22);
-    SET(height, 22);
-    SET(radius, 100);
-    SET(color, 0x202020);
+    BODY(dot)
+    {
+        SET(width, 22);
+        SET(height, 22);
+        SET(radius, 100);
+        SET(color, 0x202020);
+    }
 }
-COMPONENT_END;
+END
 
 const auto dice_gradient = gradient{gradient::vertical,
                                     {
@@ -26,210 +29,219 @@ const auto dice_gradient = gradient{gradient::vertical,
                                         {0.95, 0x909090},
                                     }};
 const auto dice_gradient_hover = gradient{gradient::vertical,
-                                    {
-                                     {0.0, 0xffffff},
-                                     {0.8, 0xdddddd},
-                                     {0.95, 0xcccccc},
-                                     }};
+                                          {
+                                              {0.0, 0xffffff},
+                                              {0.8, 0xdddddd},
+                                              {0.95, 0xcccccc},
+                                          }};
 
-COMPONENT_BEGIN(rectangle, dice)
+COMPONENT(rectangle, dice)
 {
-    SET(width, 114);
-    SET(height, 114);
-    SET(radius, 10);
-    CHILD(mouse_area, mouse)
+    BODY(dice)
     {
-        anchors.fill(parent);
-    }
-    gradient = BIND((mouse->contains_mouse, cm), cm ? dice_gradient_hover : dice_gradient);
-}
-COMPONENT_END;
-
-COMPONENT_BEGIN(rectangle, panel)
-{
-    SET(color, 0x800020);
-
-    CHILD(rectangle, area1)
-    {
-        anchors.set_left(&parent, anchors::left);
-        anchors.set_right(&parent, anchors::right);
-        SET(height, 134);
-        SET(color, 0xa00020);
-
-        CHILD(row, dices)
+        SET(width, 114);
+        SET(height, 114);
+        SET(radius, 10);
+        CHILD(mouse_area, mouse)
         {
-            SET(spacing, 12);
-            SET(padding, 10);
+            anchors.fill(parent);
+        }
+        gradient = BIND((mouse->contains_mouse, cm),
+                        cm ? dice_gradient_hover : dice_gradient);
+    }
+}
+END
 
-            CHILD(dice, dice1)
+COMPONENT(rectangle, panel)
+{
+    DECLARE(image, img);
+
+    BODY(panel)
+    {
+        SET(color, 0x800020);
+
+        CHILD(rectangle, area1)
+        {
+            anchors.set_left(&parent, anchors::left);
+            anchors.set_right(&parent, anchors::right);
+            SET(height, 134);
+            SET(color, 0xa00020);
+
+            CHILD(row, dices)
             {
-                CHILD(dot, d1)
-                {
-                    anchors.center_in(dice1);
-                }
-            }
+                SET_BIND(spacing, (img.width, w), w / 4);
+                SET(padding, 10);
 
-            CHILD(dice, dice2)
-            {
-                CHILD(dot, d1)
+                CHILD(dice, dice1)
                 {
-                    anchors.set_left(dice2, anchors::left);
-                    anchors.set_bottom(dice2, anchors::bottom);
-                    anchors.margins = 14;
+                    CHILD(dot, d1)
+                    {
+                        anchors.center_in(dice1);
+                    }
                 }
 
-                CHILD(dot, d2)
+                CHILD(dice, dice2)
                 {
-                    anchors.set_right(dice2, anchors::right);
-                    anchors.set_top(dice2, anchors::top);
-                    anchors.margins = 14;
-                }
-            }
+                    CHILD(dot, d1)
+                    {
+                        anchors.set_left(dice2, anchors::left);
+                        anchors.set_bottom(dice2, anchors::bottom);
+                        anchors.margins = 14;
+                    }
 
-            CHILD(dice, dice3)
-            {
-                CHILD(dot, d1)
-                {
-                    anchors.set_left(dice3, anchors::left);
-                    anchors.set_bottom(dice3, anchors::bottom);
-                    anchors.margins = 14;
-                }
-
-                CHILD(dot, d2)
-                {
-                    anchors.set_right(dice3, anchors::right);
-                    anchors.set_top(dice3, anchors::top);
-                    anchors.margins = 14;
+                    CHILD(dot, d2)
+                    {
+                        anchors.set_right(dice2, anchors::right);
+                        anchors.set_top(dice2, anchors::top);
+                        anchors.margins = 14;
+                    }
                 }
 
-                CHILD(dot, d3)
+                CHILD(dice, dice3)
                 {
-                    anchors.center_in(dice3);
-                }
-            }
+                    CHILD(dot, d1)
+                    {
+                        anchors.set_left(dice3, anchors::left);
+                        anchors.set_bottom(dice3, anchors::bottom);
+                        anchors.margins = 14;
+                    }
 
-            CHILD(dice, dice4)
-            {
-                CHILD(dot, d1)
-                {
-                    anchors.set_left(dice4, anchors::left);
-                    anchors.set_bottom(dice4, anchors::bottom);
-                    anchors.margins = 14;
-                }
+                    CHILD(dot, d2)
+                    {
+                        anchors.set_right(dice3, anchors::right);
+                        anchors.set_top(dice3, anchors::top);
+                        anchors.margins = 14;
+                    }
 
-                CHILD(dot, d2)
-                {
-                    anchors.set_right(dice4, anchors::right);
-                    anchors.set_top(dice4, anchors::top);
-                    anchors.margins = 14;
-                }
-
-                CHILD(dot, d3)
-                {
-                    anchors.set_left(dice4, anchors::left);
-                    anchors.set_top(dice4, anchors::top);
-                    anchors.margins = 14;
+                    CHILD(dot, d3)
+                    {
+                        anchors.center_in(dice3);
+                    }
                 }
 
-                CHILD(dot, d4)
+                CHILD(dice, dice4)
                 {
-                    anchors.set_right(dice4, anchors::right);
-                    anchors.set_bottom(dice4, anchors::bottom);
-                    anchors.margins = 14;
-                }
-            }
+                    CHILD(dot, d1)
+                    {
+                        anchors.set_left(dice4, anchors::left);
+                        anchors.set_bottom(dice4, anchors::bottom);
+                        anchors.margins = 14;
+                    }
 
-            CHILD(dice, dice5)
-            {
-                CHILD(dot, d1)
-                {
-                    anchors.set_left(dice5, anchors::left);
-                    anchors.set_bottom(dice5, anchors::bottom);
-                    anchors.margins = 14;
-                }
+                    CHILD(dot, d2)
+                    {
+                        anchors.set_right(dice4, anchors::right);
+                        anchors.set_top(dice4, anchors::top);
+                        anchors.margins = 14;
+                    }
 
-                CHILD(dot, d2)
-                {
-                    anchors.set_right(dice5, anchors::right);
-                    anchors.set_top(dice5, anchors::top);
-                    anchors.margins = 14;
-                }
+                    CHILD(dot, d3)
+                    {
+                        anchors.set_left(dice4, anchors::left);
+                        anchors.set_top(dice4, anchors::top);
+                        anchors.margins = 14;
+                    }
 
-                CHILD(dot, d3)
-                {
-                    anchors.set_left(dice5, anchors::left);
-                    anchors.set_top(dice5, anchors::top);
-                    anchors.margins = 14;
-                }
-
-                CHILD(dot, d4)
-                {
-                    anchors.set_right(dice5, anchors::right);
-                    anchors.set_bottom(dice5, anchors::bottom);
-                    anchors.margins = 14;
+                    CHILD(dot, d4)
+                    {
+                        anchors.set_right(dice4, anchors::right);
+                        anchors.set_bottom(dice4, anchors::bottom);
+                        anchors.margins = 14;
+                    }
                 }
 
-                CHILD(dot, d5)
+                CHILD(dice, dice5)
                 {
-                    anchors.center_in(dice5);
-                }
-            }
+                    CHILD(dot, d1)
+                    {
+                        anchors.set_left(dice5, anchors::left);
+                        anchors.set_bottom(dice5, anchors::bottom);
+                        anchors.margins = 14;
+                    }
 
-            CHILD(dice, dice6)
-            {
-                CHILD(dot, d1)
-                {
-                    anchors.set_left(dice6, anchors::left);
-                    anchors.set_bottom(dice6, anchors::bottom);
-                    anchors.margins = 14;
-                }
+                    CHILD(dot, d2)
+                    {
+                        anchors.set_right(dice5, anchors::right);
+                        anchors.set_top(dice5, anchors::top);
+                        anchors.margins = 14;
+                    }
 
-                CHILD(dot, d2)
-                {
-                    anchors.set_right(dice6, anchors::right);
-                    anchors.set_top(dice6, anchors::top);
-                    anchors.margins = 14;
-                }
+                    CHILD(dot, d3)
+                    {
+                        anchors.set_left(dice5, anchors::left);
+                        anchors.set_top(dice5, anchors::top);
+                        anchors.margins = 14;
+                    }
 
-                CHILD(dot, d3)
-                {
-                    anchors.set_left(dice6, anchors::left);
-                    anchors.set_top(dice6, anchors::top);
-                    anchors.margins = 14;
-                }
+                    CHILD(dot, d4)
+                    {
+                        anchors.set_right(dice5, anchors::right);
+                        anchors.set_bottom(dice5, anchors::bottom);
+                        anchors.margins = 14;
+                    }
 
-                CHILD(dot, d4)
-                {
-                    anchors.set_right(dice6, anchors::right);
-                    anchors.set_bottom(dice6, anchors::bottom);
-                    anchors.margins = 14;
-                }
-
-                CHILD(dot, d5)
-                {
-                    anchors.set_left(dice6, anchors::left);
-                    anchors.set_vertical_center(dice6,
-                                                anchors::vertical_center);
-                    anchors.margins = 14;
+                    CHILD(dot, d5)
+                    {
+                        anchors.center_in(dice5);
+                    }
                 }
 
-                CHILD(dot, d6)
+                CHILD(dice, dice6)
                 {
-                    anchors.set_right(dice6, anchors::right);
-                    anchors.set_vertical_center(dice6,
-                                                anchors::vertical_center);
-                    anchors.margins = 14;
-                }
-            }
+                    CHILD(dot, d1)
+                    {
+                        anchors.set_left(dice6, anchors::left);
+                        anchors.set_bottom(dice6, anchors::bottom);
+                        anchors.margins = 14;
+                    }
 
-            CHILD(image, img)
-            {
-                SET(source, "test.png");
+                    CHILD(dot, d2)
+                    {
+                        anchors.set_right(dice6, anchors::right);
+                        anchors.set_top(dice6, anchors::top);
+                        anchors.margins = 14;
+                    }
+
+                    CHILD(dot, d3)
+                    {
+                        anchors.set_left(dice6, anchors::left);
+                        anchors.set_top(dice6, anchors::top);
+                        anchors.margins = 14;
+                    }
+
+                    CHILD(dot, d4)
+                    {
+                        anchors.set_right(dice6, anchors::right);
+                        anchors.set_bottom(dice6, anchors::bottom);
+                        anchors.margins = 14;
+                    }
+
+                    CHILD(dot, d5)
+                    {
+                        anchors.set_left(dice6, anchors::left);
+                        anchors.set_vertical_center(dice6,
+                                                    anchors::vertical_center);
+                        anchors.margins = 14;
+                    }
+
+                    CHILD(dot, d6)
+                    {
+                        anchors.set_right(dice6, anchors::right);
+                        anchors.set_vertical_center(dice6,
+                                                    anchors::vertical_center);
+                        anchors.margins = 14;
+                    }
+                }
+
+                CHILD(image, img)
+                {
+                    SET(source, "test.png");
+                }
             }
         }
     }
 }
-COMPONENT_END;
+END;
 
 int main(int argc, char* args[])
 
