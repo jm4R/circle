@@ -26,8 +26,6 @@ application_base::~application_base()
 
 application::application()
 {
-    auto* r = Roboto_Regular_ttf;
-
     fonts_.add_memory(reinterpret_cast<std::byte*>(Roboto_Regular_ttf),
                       Roboto_Regular_ttf_len);
     app = this;

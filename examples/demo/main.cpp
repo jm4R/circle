@@ -5,6 +5,7 @@
 #include <circle/reactive/bind.hpp>
 #include <circle/rectangle.hpp>
 #include <circle/row.hpp>
+#include <circle/text.hpp>
 #include <circle/window.hpp>
 
 int main(int argc, char* args[])
@@ -82,6 +83,13 @@ int main(int argc, char* args[])
 
     image& img = window.content_item.add<image>();
     img.source = "test.png";
+
+    text& txt = window.content_item.add<text>();
+    txt.font.point_size = 24;
+    txt.color = 0xe0e0e0;
+    txt.value = "Circle is both a library and a framework";
+    txt.anchors.set_top(img, anchors::bottom);
+    txt.x = 30;
 
     window.show();
     app.exec();

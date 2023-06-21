@@ -15,7 +15,7 @@ image::image()
     height = BIND(source_height, loaded_height_,
                   std::min(source_height, loaded_height_));
     // TODO: don't capture this
-    source.value_changed().connect([this] { needs_reload_ = true; });
+    source.value_changed().connect([this] { dirty_ = true; });
 }
 
 void image::draw(sdl::context ctx)
@@ -30,8 +30,10 @@ void image::draw(sdl::context ctx)
 
 void image::load(sdl::context ctx)
 {
-    if (!needs_reload_)
+    if (!dirty_)
         return;
+
+    sdl::texture_destroy(ctx_);
 
     if (source.get().empty())
         return;
@@ -49,7 +51,7 @@ void image::load(sdl::context ctx)
         // TODO: resize
     }
 
-    needs_reload_ = false;
+    dirty_ = false;
 }
 
 } // namespace circle

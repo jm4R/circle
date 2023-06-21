@@ -27,7 +27,7 @@ private:
     property<unit> loaded_width_;
     property<unit> loaded_height_;
 
-    bool needs_reload_{true};
+    bool dirty_{true};
 };
 
 } // namespace circle

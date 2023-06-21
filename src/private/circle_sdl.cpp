@@ -344,16 +344,21 @@ void draw_text_line(context& ctx, const font_context& font, const char* text,
         h = 0xffff;
     std::uint8_t cr, cg, cb, ca;
     SDL_GetRenderDrawColor(ctx.renderer, &cr, &cg, &cb, &ca);
-    SDL_Surface* s = TTF_RenderUTF8_Blended(font.font, text, {cr, cg, cb});
+    SDL_Surface* s = TTF_RenderUTF8_Blended(font.font, text, {cr, cg, cb, ca});
     if (!s)
         return;
     SDL_Texture* t = SDL_CreateTextureFromSurface(renderer(ctx), s);
+    context new_ctx{ctx.renderer, t};
+    set_color(new_ctx, cr, cg, cb, 0x00);
+    clear(new_ctx); // just to pre-set semi-transparent pixels color
     SDL_SetTextureAlphaMod(t, ca);
     SDL_Rect dst_rect{x, y, std::min(s->w, w), std::min(s->h, h)};
     SDL_Rect src_rect{0, 0, std::min(s->w, w), std::min(s->h, h)};
     SDL_RenderCopy(ctx.renderer, t, &src_rect, &dst_rect);
     SDL_FreeSurface(s);
     SDL_DestroyTexture(t);
+
+    set_color(ctx, cr, cg, cb, ca);
 }
 
 } // namespace circle::sdl
