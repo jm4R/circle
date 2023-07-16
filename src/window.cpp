@@ -43,19 +43,25 @@ void window::update()
     sdl::flush(ctx_);
 }
 
-void window::handle_event(const sdl::event& ev)
+void window::handle_event(const event& ev)
 {
-    switch (ev.type)
+    if (ev.type == event_type::timer)
+        update(); // FIXME: mark dirty
+
+    if (ev.type != event_type::sdl)
+        return;
+
+    switch (ev.sdl->type)
     {
     case SDL_WINDOWEVENT:
-        if (ctx_.id != ev.window.windowID)
+        if (ctx_.id != ev.sdl->window.windowID)
             return;
 
-        switch (ev.window.event)
+        switch (ev.sdl->window.event)
         {
         case SDL_WINDOWEVENT_RESIZED:
         case SDL_WINDOWEVENT_SIZE_CHANGED:
-            on_resized(ev.window.data1, ev.window.data2);
+            on_resized(ev.sdl->window.data1, ev.sdl->window.data2);
             break;
         case SDL_WINDOWEVENT_SHOWN:
         case SDL_WINDOWEVENT_HIDDEN:
@@ -78,17 +84,15 @@ void window::handle_event(const sdl::event& ev)
         }
         break;
     case SDL_MOUSEMOTION:
-        if (ctx_.id != ev.motion.windowID)
+        if (ctx_.id != ev.sdl->motion.windowID)
             return;
-        content_item.propagate_event(ev);
-        update();
+        update(); // FIXME: mark dirty
         break;
     case SDL_MOUSEBUTTONDOWN:
     case SDL_MOUSEBUTTONUP:
-        if (ctx_.id != ev.button.windowID)
+        if (ctx_.id != ev.sdl->button.windowID)
             return;
-        content_item.propagate_event(ev);
-        update();
+        update(); // FIXME: mark dirty
         break;
     }
 }

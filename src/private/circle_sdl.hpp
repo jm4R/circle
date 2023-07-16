@@ -69,4 +69,8 @@ void apply_alpha_mask(context& dst, context& src) noexcept;
 void draw_text_line(context& ctx, const font_context& font, const char* text,
                     int x, int y, int w, int h) noexcept;
 
+using timer_clb = std::uint32_t(*)(std::uint32_t msec, void* param);
+SDL_TimerID start_timer(std::uint32_t msec, timer_clb clb, void* param);
+bool stop_timer(SDL_TimerID id);
+
 } // namespace circle::sdl

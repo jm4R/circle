@@ -361,4 +361,15 @@ void draw_text_line(context& ctx, const font_context& font, const char* text,
     set_color(ctx, cr, cg, cb, ca);
 }
 
+SDL_TimerID start_timer(uint32_t msec, timer_clb clb, void* param)
+{
+    return SDL_AddTimer(msec, clb, param);
+    SDL_TimerID id;
+}
+
+bool stop_timer(SDL_TimerID id)
+{
+    return SDL_RemoveTimer(id) == SDL_TRUE;
+}
+
 } // namespace circle::sdl

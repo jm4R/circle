@@ -23,7 +23,7 @@ public:
     void update();
 
 protected:
-    void handle_event(const sdl::event& event);
+    void handle_event(const event& event);
     void redraw();
 
 private:

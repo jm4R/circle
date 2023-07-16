@@ -7,6 +7,7 @@ struct SDL_Renderer;
 struct SDL_Texture;
 using TTF_Font = struct _TTF_Font;
 union SDL_Event;
+using SDL_TimerID = int;
 
 namespace circle::sdl {
 
@@ -37,5 +38,6 @@ enum font_style
 };
 
 using event = SDL_Event;
+using timer_id = SDL_TimerID;
 
 } // namespace circle::sdl

@@ -5,6 +5,7 @@ add_library(circle-core STATIC
     application.cpp
     color.cpp
     column.cpp
+    event.cpp
     font.cpp
     gradient.cpp
     image.cpp
@@ -14,6 +15,7 @@ add_library(circle-core STATIC
     rectangle.cpp
     row.cpp
     text.cpp
+    timer.cpp
     window.cpp
 
     utils/font_database.cpp
@@ -31,6 +33,7 @@ add_library(circle-core STATIC
     ${circle_include_dir}/color.hpp
     ${circle_include_dir}/column.hpp
     ${circle_include_dir}/declarative.hpp
+    ${circle_include_dir}/event.hpp
     ${circle_include_dir}/font.hpp
     ${circle_include_dir}/fwd.hpp
     ${circle_include_dir}/gradient.hpp
@@ -41,6 +44,7 @@ add_library(circle-core STATIC
     ${circle_include_dir}/rectangle.hpp
     ${circle_include_dir}/row.hpp
     ${circle_include_dir}/text.hpp
+    ${circle_include_dir}/timer.hpp
     ${circle_include_dir}/window.hpp
 
     ${circle_include_dir}/utils/font_database.hpp

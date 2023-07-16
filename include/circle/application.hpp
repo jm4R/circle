@@ -1,11 +1,12 @@
 #pragma once
 
 #include <circle/fwd.hpp>
+#include <circle/object.hpp>
 #include <circle/utils/font_database.hpp>
 #include <circle/utils/sdl_utils.hpp>
+#include <circle/event.hpp>
 
-#include <vector>
-
+#include <list>
 #include <vector>
 
 namespace circle {
@@ -28,14 +29,18 @@ public:
     int exec();
     void quit();
 
+    void register_event_handler(object_ptr obj);
+    bool post_event(event ev);
+
     font_database& fonts();
 
 protected:
-    void handle_event(const sdl::event& ev);
+    void handle_event(const event& ev);
 
 private:
     font_database fonts_;
     std::vector<window*> windows_;
+    std::vector<object_ptr> event_handlers_;
     bool quit_{false};
 
 private:

@@ -17,6 +17,8 @@ application_base::application_base()
     once_guard = true;
 
     sdl::init_engine();
+    if (!detail::register_circle_events())
+        throw "Initialization error: unable to register events";
 }
 
 application_base::~application_base()
@@ -42,7 +44,7 @@ int application::exec()
     {
         sdl::event ev;
         sdl::event_wait(ev);
-        handle_event(ev);
+        handle_event(to_circle_event(ev));
     }
     return 0;
 }
@@ -54,14 +56,25 @@ void application::quit()
     sdl::event_push(ev);
 }
 
+void application::register_event_handler(object_ptr obj)
+{
+    event_handlers_.push_back(std::move(obj));
+}
+
+bool application::post_event(event ev)
+{
+    auto sdl_ev = to_sdl_event(ev);
+    return SDL_PushEvent(&sdl_ev) >= 0;
+}
+
 font_database& application::fonts()
 {
     return fonts_;
 }
 
-void application::handle_event(const sdl::event& ev)
+void application::handle_event(const event& ev)
 {
-    if (ev.type == SDL_QUIT)
+    if (ev.type == event_type::sdl && ev.sdl->type == SDL_QUIT)
     {
         quit_ = true;
     }
@@ -69,6 +82,12 @@ void application::handle_event(const sdl::event& ev)
     for (auto* w : windows_)
     {
         w->handle_event(ev);
+    }
+
+    for (auto& o : event_handlers_)
+    {
+        if (o)
+            o.get()->on_event(ev);
     }
 }
 

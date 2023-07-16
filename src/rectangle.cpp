@@ -20,8 +20,15 @@ void rectangle::draw(sdl::context ctx)
 void rectangle::draw_simple(sdl::context& ctx, circle::color c)
 {
     sdl::set_color(ctx, c.r, c.g, c.b, c.a);
-    sdl::draw_rectangle_filled_rounded(ctx, render_x(), render_y(), width,
-                                       height, radius, antialiasing);
+    if (radius > 0)
+    {
+        sdl::draw_rectangle_filled_rounded(ctx, render_x(), render_y(), width,
+                                           height, radius, antialiasing);
+    }
+    else
+    {
+        sdl::draw_rectangle_filled(ctx, render_x(), render_y(), width, height);
+    }
 }
 
 void rectangle::draw_gradient_vertical(sdl::context& ctx, unit x, unit y)

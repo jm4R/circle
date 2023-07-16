@@ -31,6 +31,9 @@ public:
     item(item&& other);
     item& operator=(item&& other);
 
+    using enable_tracking_ptr<item>::moved;
+    using enable_tracking_ptr<item>::before_destroyed;
+
     virtual void add(item_ptr child);
 
     template <typename T>
@@ -46,11 +49,9 @@ public:
     std::vector<item_ptr>& children() { return children_; }
 
     void render(sdl::context& ctx);
-    void propagate_event(const sdl::event& ev);
 
 protected:
     virtual void draw(sdl::context ctx);
-    virtual void handle_event(const sdl::event& ev);
 
 protected:
     unit render_x() const

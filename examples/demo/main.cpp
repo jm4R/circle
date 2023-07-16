@@ -6,6 +6,7 @@
 #include <circle/rectangle.hpp>
 #include <circle/row.hpp>
 #include <circle/text.hpp>
+#include <circle/timer.hpp>
 #include <circle/window.hpp>
 
 int main(int argc, char* args[])
@@ -86,10 +87,21 @@ int main(int argc, char* args[])
 
     text& txt = window.content_item.add<text>();
     txt.font.point_size = 24;
-    txt.color = 0xe0e0e0;
+    txt.color = BIND((txt.x, x), color(80, x/2, 80));
     txt.value = "Circle is both a library and a framework";
     txt.anchors.set_top(img, anchors::bottom);
     txt.x = 30;
+
+    timer t;
+    t.interval = 8;
+    t.triggered.connect([&]{
+        static int dx = 2;
+        txt.x = txt.x + dx;
+        r1.radius = r1.radius + dx;
+        if (txt.x == 0 || txt.x == 300)
+            dx *= -1;
+    });
+    t.start();
 
     window.show();
     app.exec();

@@ -26,6 +26,7 @@ text::text()
 {
     font.value_changed.connect([this] { recalculate_size(); });
     value.value_changed().connect([this] { recalculate_size(); });
+    color.value_changed().connect([this] { dirty_ = true; });
     width = BIND_EQ(text_width_);
     height = BIND_EQ(text_height_);
 }

@@ -12,8 +12,11 @@ public: /*properties*/
 
     signal<> clicked;
 
+public:
+    explicit mouse_area();
+
 protected:
-    void handle_event(const sdl::event& ev) override;
+    void on_event(const event& ev) override;
 };
 
 } // namespace circle

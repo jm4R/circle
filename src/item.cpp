@@ -6,19 +6,19 @@ item::item() : anchors{this} {}
 
 item::~item()
 {
-    enable_tracking_ptr::call_before_destroyed();
+    enable_tracking_ptr<item>::call_before_destroyed();
 }
 
 item::item(item&& other)
     : object{std::move(other)}, anchors{std::move(other.anchors)}
 {
-    enable_tracking_ptr::call_moved();
+    enable_tracking_ptr<item>::call_moved();
 }
 
 item& item::operator=(item&& other)
 {
     object::operator=(std::move(other));
-    enable_tracking_ptr::call_moved();
+    enable_tracking_ptr<item>::call_moved();
     return *this;
 }
 
@@ -43,25 +43,9 @@ void item::render(sdl::context& ctx)
     }
 }
 
-void item::propagate_event(const sdl::event& ev)
-{
-    if (enabled)
-    {
-        handle_event(ev);
-
-        for (auto& child : children_)
-            child->propagate_event(ev);
-    }
-}
-
 void item::draw(sdl::context ctx)
 {
     // item doesn't have visual representation
-}
-
-void item::handle_event(const sdl::event& ev)
-{
-    // item doesn't use events
 }
 
 } // namespace circle
