@@ -18,6 +18,8 @@ add_library(circle-core STATIC
     timer.cpp
     window.cpp
 
+    animation/animation.cpp
+
     utils/font_database.cpp
     utils/sdl_utils.cpp
 
@@ -46,6 +48,8 @@ add_library(circle-core STATIC
     ${circle_include_dir}/text.hpp
     ${circle_include_dir}/timer.hpp
     ${circle_include_dir}/window.hpp
+
+    ${circle_include_dir}/animation/animation.hpp
 
     ${circle_include_dir}/utils/font_database.hpp
     ${circle_include_dir}/utils/sdl_utils.hpp

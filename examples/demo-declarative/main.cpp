@@ -6,6 +6,7 @@
 #include <circle/reactive/bind.hpp>
 #include <circle/rectangle.hpp>
 #include <circle/row.hpp>
+#include <circle/timer.hpp>
 #include <circle/window.hpp>
 
 using namespace circle;
@@ -231,6 +232,14 @@ COMPONENT(rectangle, panel)
                                                     anchors::vertical_center);
                         anchors.margins = 14;
                     }
+
+                }
+
+                CHILD_OBJ(timer, t)
+                {
+                    t->interval = 10;
+                    t->triggered += [&] { dice6->radius = 15; };
+                    t->running = true;
                 }
 
                 CHILD(image, img)

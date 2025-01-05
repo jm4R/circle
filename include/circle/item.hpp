@@ -7,6 +7,8 @@
 #include <circle/reactive/tracking_ptr.hpp>
 #include <circle/utils/sdl_utils.hpp>
 
+#include <type_traits>
+
 namespace circle {
 
 class item;
@@ -41,8 +43,11 @@ public:
     {
         auto ptr = std::make_unique<T>();
         auto raw_ptr = ptr.get();
-        add(raw_ptr);
-        owning_items_.push_back(std::move(ptr));
+        if constexpr (std::is_constructible_v<item_ptr, T*>)
+        {
+            add(item_ptr{raw_ptr});
+        }
+        owning_objects_.push_back(std::move(ptr));
         return *raw_ptr;
     }
 
@@ -79,7 +84,7 @@ protected:
     }
 
 private:
-    std::vector<std::unique_ptr<item>> owning_items_;
+    std::vector<std::unique_ptr<object>> owning_objects_;
     std::vector<item_ptr> children_;
 };
 } // namespace circle

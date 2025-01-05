@@ -88,7 +88,7 @@ int main(int argc, char* args[])
     text& txt = window.content_item.add<text>();
     txt.font.point_size = 24;
     txt.color = BIND((txt.x, x), color(80, x/2, 80));
-    txt.value = "Circle is both a library and a framework";
+    txt.value = "What a circle?!";
     txt.anchors.set_top(img, anchors::bottom);
     txt.x = 30;
 

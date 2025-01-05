@@ -73,4 +73,9 @@ private:                                                                       \
     if (type &c_working_obj = *name; true)                                     \
       if (::circle::anchors &anchors = c_working_obj.anchors; true)
 
+#define CHILD_OBJ(type, name)                                                  \
+    type* name =                                                               \
+        &c_get_declared_or_add<struct c_##name##_tag, type>(c_working_obj);    \
+    if (type& c_working_obj = *name; true)
+
 #define END ; // just to make clang-format happy

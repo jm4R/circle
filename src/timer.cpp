@@ -10,6 +10,17 @@ timer::timer()
 {
     assert(circle::app);
     circle::app->register_event_handler(this);
+    // TODO: don't capture this
+    running.value_changed().connect([this](bool val) {
+        if (val)
+        {
+            start();
+        }
+        else
+        {
+            stop();
+        }
+    });
 }
 
 timer::~timer()
