@@ -20,7 +20,7 @@ COMPONENT(rectangle, dot)
         SET(color, 0x202020);
     }
 }
-END
+END;
 
 const auto dice_gradient = gradient{gradient::vertical,
                                     {
@@ -46,8 +46,8 @@ COMPONENT(rectangle, dice)
         {
             anchors.fill(parent);
         }
-        gradient = BIND((mouse->contains_mouse, cm),
-                        cm ? dice_gradient_hover : dice_gradient);
+        SET_BIND(gradient, (mouse->contains_mouse, cm),
+                 cm ? dice_gradient_hover : dice_gradient);
     }
 }
 END
@@ -62,21 +62,21 @@ COMPONENT(rectangle, panel)
 
         CHILD(rectangle, area1)
         {
-            anchors.set_left(&parent, anchors::left);
-            anchors.set_right(&parent, anchors::right);
+            anchors.set_left(parent, anchors::left);
+            anchors.set_right(parent, anchors::right);
             SET(height, 134);
             SET(color, 0xa00020);
 
             CHILD(row, dices)
             {
-                SET_BIND(spacing, (img.width, w), w / 4);
+                SET_BIND(spacing, (img->width, w), w / 10);
                 SET(padding, 10);
 
                 CHILD(dice, dice1)
                 {
                     CHILD(dot, d1)
                     {
-                        anchors.center_in(dice1);
+                        anchors.center_in(parent);
                     }
                 }
 
@@ -252,8 +252,8 @@ int main(int argc, char* args[])
     window window{800, 400};
 
     // rectangle
-    auto& r1 = window.content_item.add<panel>();
-    r1.anchors.fill(r1.parent);
+    auto r1 = window.content_item.add<panel>();
+    r1->anchors.fill(r1->parent);
 
     window.show();
     app.exec();

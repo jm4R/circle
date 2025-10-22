@@ -22,12 +22,12 @@ struct base_component
     explicit base_component() = default;
 
     template <typename Tag, typename ComponentT, typename ParentT>
-    auto& c_get_declared_or_add(ParentT& parent)
+    auto c_get_declared_or_add(ParentT& parent)
     {
         if constexpr (circle::detail::fwd_declared<Tag>::value)
         {
-            auto& res = Tag::getter(static_cast<component_t&>(*this));
-            parent.add(&res);
+            auto res = Tag::getter(static_cast<component_t&>(*this));
+            parent.add(res);
             return res;
         }
         else
@@ -44,11 +44,15 @@ struct base_component
 
 #define DECLARE(component_type, name)                                          \
 private:                                                                       \
-    component_type name{};                                                     \
+    ::circle::ptr<component_type> name = ::circle::make_ptr<component_type>(); \
     struct c_##name##_tag                                                      \
     {                                                                          \
         using type = component_type;                                           \
-        static type& getter(component_t& comp) { return comp.name; }           \
+        using tracking_type = ::circle::tracking_ptr<component_type>;          \
+        static tracking_type getter(component_t& comp)                         \
+        {                                                                      \
+            return ::circle::tracking_ptr{comp.name};                          \
+        }                                                                      \
     }
 
 #define BODY(name)                                                             \
@@ -67,10 +71,12 @@ private:                                                                       \
 #define SET_BIND(propname, ...) c_working_obj.propname = BIND(__VA_ARGS__)
 
 #define CHILD(type, name)                                                      \
-  type *name =                                                                 \
-      &c_get_declared_or_add<struct c_##name##_tag, type>(c_working_obj);      \
-  if (auto &parent = *name->parent; true)                                      \
-    if (type &c_working_obj = *name; true)                                     \
-      if (::circle::anchors &anchors = c_working_obj.anchors; true)
+    static_assert(std::is_base_of_v<::circle::item, type>,                     \
+                  "Only items can be children");                               \
+    ::circle::tracking_ptr<type> name =                                        \
+        c_get_declared_or_add<struct c_##name##_tag, type>(c_working_obj);     \
+    if (::circle::item_ptr& parent = name->parent; true)                       \
+        if (type& c_working_obj = *name; true)                                 \
+            if (::circle::anchors& anchors = c_working_obj.anchors; true)
 
 #define END ; // just to make clang-format happy

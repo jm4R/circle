@@ -31,10 +31,10 @@ void row::add(item_ptr child)
     }
     else
     {
-        anch.set_left(tracking_form_this<item>(), anchors::left);
+        anch.set_left(tracking_from(this), anchors::left);
         anch.left_margin = BIND_EQ(left_padding);
     }
-    anch.set_top(tracking_form_this<item>(), anchors::top);
+    anch.set_top(tracking_from(this), anchors::top);
     anch.top_margin = BIND_EQ(top_padding);
     anch.bottom_margin = BIND_EQ(bottom_padding);
     anch.right_margin = BIND_EQ(right_padding);

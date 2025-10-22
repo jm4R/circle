@@ -2,7 +2,7 @@
 
 namespace circle {
 
-item::item() : anchors{tracking_form_this<item>()} {}
+item::item() : anchors{tracking_from(this)} {}
 
 void item::add(item_ptr child)
 {
@@ -10,7 +10,7 @@ void item::add(item_ptr child)
         return;
     //    if (child->parent)
     //        child->parent->remove(child);
-    child->parent = tracking_form_this<item>();
+    child->parent = tracking_from(this);
     children_.emplace_back(std::move(child));
 }
 

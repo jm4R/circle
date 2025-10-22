@@ -9,7 +9,7 @@ namespace circle {
 timer::timer()
 {
     assert(circle::app);
-    circle::app->register_event_handler(tracking_form_this());
+    circle::app->register_event_handler(tracking_from_this());
 }
 
 timer::~timer()

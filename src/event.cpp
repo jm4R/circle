@@ -25,7 +25,7 @@ event to_circle_event(const sdl::event& ev) noexcept
             break;
         case event_type::timer:
             res.timer =
-                timer_event{static_cast<sdl::timer_id>(ev.user.windowID)};
+                timer_event{static_cast<sdl::timer_id>(ev.user.code)};
             break;
         case event_type::user:
             res.user_data = user_event{ev.user.data1, ev.user.data2};
@@ -48,8 +48,8 @@ sdl::event to_sdl_event(const event& ev) noexcept
     case event_type::sdl:
         break;
     case event_type::timer:
-        static_assert(sizeof(res.user.windowID) == sizeof(Uint32));
-        res.user.windowID = static_cast<Uint32>(ev.timer.id);
+        static_assert(sizeof(res.user.code) == sizeof(Sint32));
+        res.user.code = static_cast<Sint32>(ev.timer.id);
         break;
     case event_type::user:
         res.user.data1 = ev.user_data.data1;
