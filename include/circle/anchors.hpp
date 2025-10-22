@@ -2,10 +2,10 @@
 
 #include <circle/fwd.hpp>
 #include <circle/reactive/property.hpp>
+#include <circle/reactive/ptr.hpp>
 
 namespace circle {
 
-class item;
 using item_ptr = circle::tracking_ptr<item>;
 
 class anchors
@@ -34,6 +34,11 @@ public:
 
     anchors(item_ptr parent);
 
+    anchors(const anchors&) = delete;
+    anchors& operator=(const anchors) = delete;
+    anchors(anchors&&) = delete;
+    anchors& operator=(anchors&&) = delete;
+
     signal<>& horizontal_changed() { return horizontal_changed_; }
     signal<>& vertical_changed() { return vertical_changed_; }
 
@@ -41,46 +46,21 @@ public:
     void set(horizontal_mode destination_anchor, item_ptr source_item,
              horizontal_mode source_anchor);
     void set_left(item_ptr source_item, horizontal_mode source_anchor);
-    void set_left(item& source_item, horizontal_mode source_anchor)
-    {
-        set_left(&source_item, source_anchor);
-    }
     void set_horizontal_center(item_ptr source_item,
                                horizontal_mode source_anchor);
-    void set_horizontal_center(item& source_item, horizontal_mode source_anchor)
-    {
-        set_horizontal_center(&source_item, source_anchor);
-    }
     void set_right(item_ptr source_item, horizontal_mode source_anchor);
-    void set_right(item& source_item, horizontal_mode source_anchor)
-    {
-        set_right(&source_item, source_anchor);
-    }
 
     // vertical
     void set(vertical_mode destination_anchor, item_ptr source_item,
              vertical_mode source_anchor);
     void set_top(item_ptr source_item, vertical_mode source_anchor);
-    void set_top(item& source_item, vertical_mode source_anchor)
-    {
-        set_top(&source_item, source_anchor);
-    }
     void set_vertical_center(item_ptr source_item, vertical_mode source_anchor);
-    void set_vertical_center(item& source_item, vertical_mode source_anchor)
-    {
-        set_vertical_center(&source_item, source_anchor);
-    }
+    void set_vertical_center(item& source_item, vertical_mode source_anchor);
     void set_bottom(item_ptr source_item, vertical_mode source_anchor);
-    void set_bottom(item& source_item, vertical_mode source_anchor)
-    {
-        set_bottom(&source_item, source_anchor);
-    }
 
     // convenience anchors
     void fill(item_ptr source_item);
-    void fill(item& source_item) { fill(&source_item); }
     void center_in(item_ptr source_item);
-    void center_in(item& source_item) { center_in(&source_item); }
 
     void clear();
 

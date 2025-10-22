@@ -92,7 +92,7 @@ void anchors::set_left(item_ptr source_item, horizontal_mode source_anchor)
     CIRCLE_UB(!horizontal_center_ || !right_,
               "Cannot specify left, right, and horizontal_center anchors at "
               "the same time");
-    left_.item = std::move(source_item);
+    left_.item = source_item;
     left_.mode = source_anchor;
     left_.item->anchors.horizontal_changed().connect(
         [this] { recalculate_horizontal(); });

@@ -56,7 +56,7 @@ void application::quit()
     sdl::event_push(ev);
 }
 
-void application::register_event_handler(object_ptr obj)
+void application::register_event_handler(object_tracking obj)
 {
     event_handlers_.push_back(std::move(obj));
 }
@@ -84,10 +84,12 @@ void application::handle_event(const event& ev)
         w->handle_event(ev);
     }
 
-    for (auto& o : event_handlers_)
+    for (auto& obj : event_handlers_)
     {
-        if (o)
-            o.get()->on_event(ev);
+        if (obj)
+        {
+            obj->on_event(ev);
+        }
     }
 }
 

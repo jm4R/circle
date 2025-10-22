@@ -8,7 +8,7 @@ namespace circle {
 mouse_area::mouse_area()
 {
     assert(circle::app);
-    circle::app->register_event_handler(this);
+    circle::app->register_event_handler(object::tracking_form_this());
 }
 
 void mouse_area::on_event(const event& ev)

@@ -6,7 +6,6 @@
 #include <circle/utils/sdl_utils.hpp>
 #include <circle/event.hpp>
 
-#include <list>
 #include <vector>
 
 namespace circle {
@@ -29,7 +28,7 @@ public:
     int exec();
     void quit();
 
-    void register_event_handler(object_ptr obj);
+    void register_event_handler(object_tracking obj);
     bool post_event(event ev);
 
     font_database& fonts();
@@ -40,7 +39,7 @@ protected:
 private:
     font_database fonts_;
     std::vector<window*> windows_;
-    std::vector<object_ptr> event_handlers_;
+    std::vector<object_tracking> event_handlers_;
     bool quit_{false};
 
 private:

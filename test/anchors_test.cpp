@@ -18,217 +18,217 @@ using namespace circle;
 
 TEST_CASE("anchors")
 {
-    item it50;
-    it50.width = 50;
-    it50.height = 50;
-    it50.x = 50;
-    it50.y = 50;
+    auto it50 = make_ptr<item>();
+    it50->width = 50;
+    it50->height = 50;
+    it50->x = 50;
+    it50->y = 50;
 
-    item it;
+    auto it = make_ptr<item>();
 
     SECTION("calculate x: as sibling")
     {
         SECTION("no horizontal")
         {
-            it.x = 1000;
-            REQUIRE(it.x == 1000);
+            it->x = 1000;
+            REQUIRE(it->x == 1000);
 
-            it.anchors.left_margin = 1000;
-            it.anchors.right_margin = 10000;
-            REQUIRE(it.x == 1000);
+            it->anchors.left_margin = 1000;
+            it->anchors.right_margin = 10000;
+            REQUIRE(it->x == 1000);
         }
 
         SECTION("left")
         {
-            it.anchors.set_left(&it50, anchors::left);
-            REQUIRE(it.x == 50);
+            it->anchors.set_left(it50, anchors::left);
+            REQUIRE(it->x == 50);
 
-            it.anchors.set_left(&it50, anchors::horizontal_center);
-            REQUIRE(it.x == 75);
+            it->anchors.set_left(it50, anchors::horizontal_center);
+            REQUIRE(it->x == 75);
 
-            it.anchors.set_left(&it50, anchors::right);
-            REQUIRE(it.x == 100);
+            it->anchors.set_left(it50, anchors::right);
+            REQUIRE(it->x == 100);
         }
 
         SECTION("left with margin")
         {
-            it.anchors.left_margin = 1000;
-            it.anchors.right_margin = 10000;
+            it->anchors.left_margin = 1000;
+            it->anchors.right_margin = 10000;
 
-            it.anchors.set_left(&it50, anchors::left);
-            REQUIRE(it.x == 1050);
+            it->anchors.set_left(it50, anchors::left);
+            REQUIRE(it->x == 1050);
 
-            it.anchors.set_left(&it50, anchors::horizontal_center);
-            REQUIRE(it.x == 1075);
+            it->anchors.set_left(it50, anchors::horizontal_center);
+            REQUIRE(it->x == 1075);
 
-            it.anchors.set_left(&it50, anchors::right);
-            REQUIRE(it.x == 1100);
+            it->anchors.set_left(it50, anchors::right);
+            REQUIRE(it->x == 1100);
         }
 
         SECTION("horizontal center")
         {
-            it.anchors.left_margin = 1000;
-            it.anchors.right_margin = 10000;
-            it.width = 10;
+            it->anchors.left_margin = 1000;
+            it->anchors.right_margin = 10000;
+            it->width = 10;
 
-            it.anchors.set_horizontal_center(&it50, anchors::left);
-            REQUIRE(it.x == 45);
+            it->anchors.set_horizontal_center(it50, anchors::left);
+            REQUIRE(it->x == 45);
 
-            it.anchors.set_horizontal_center(&it50, anchors::horizontal_center);
-            REQUIRE(it.x == 70);
+            it->anchors.set_horizontal_center(it50, anchors::horizontal_center);
+            REQUIRE(it->x == 70);
 
-            it.anchors.set_horizontal_center(&it50, anchors::right);
-            REQUIRE(it.x == 95);
+            it->anchors.set_horizontal_center(it50, anchors::right);
+            REQUIRE(it->x == 95);
         }
 
         SECTION("right")
         {
-            it.width = 10;
+            it->width = 10;
 
-            it.anchors.set_right(&it50, anchors::left);
-            REQUIRE(it.x == 40);
+            it->anchors.set_right(it50, anchors::left);
+            REQUIRE(it->x == 40);
 
-            it.anchors.set_right(&it50, anchors::horizontal_center);
-            REQUIRE(it.x == 65);
+            it->anchors.set_right(it50, anchors::horizontal_center);
+            REQUIRE(it->x == 65);
 
-            it.anchors.set_right(&it50, anchors::right);
-            REQUIRE(it.x == 90);
+            it->anchors.set_right(it50, anchors::right);
+            REQUIRE(it->x == 90);
         }
 
         SECTION("right with margin")
         {
-            it.anchors.left_margin = 1000;
-            it.anchors.right_margin = 10000;
-            it.width = 10;
+            it->anchors.left_margin = 1000;
+            it->anchors.right_margin = 10000;
+            it->width = 10;
 
-            it.anchors.set_right(&it50, anchors::left);
-            REQUIRE(it.x == 40 - 10000);
+            it->anchors.set_right(it50, anchors::left);
+            REQUIRE(it->x == 40 - 10000);
 
-            it.anchors.set_right(&it50, anchors::horizontal_center);
-            REQUIRE(it.x == 65 - 10000);
+            it->anchors.set_right(it50, anchors::horizontal_center);
+            REQUIRE(it->x == 65 - 10000);
 
-            it.anchors.set_right(&it50, anchors::right);
-            REQUIRE(it.x == 90 - 10000);
+            it->anchors.set_right(it50, anchors::right);
+            REQUIRE(it->x == 90 - 10000);
         }
 
         SECTION("dynamic change")
         {
-            it.anchors.set_left(&it50, anchors::horizontal_center);
-            REQUIRE(it.x == 75);
+            it->anchors.set_left(it50, anchors::horizontal_center);
+            REQUIRE(it->x == 75);
 
-            it50.width = 1000;
-            REQUIRE(it.x == 550);
+            it50->width = 1000;
+            REQUIRE(it->x == 550);
 
             property<unit> some = 1000;
-            it50.width = BIND_EQ(some);
-            REQUIRE(it.x == 550);
+            it50->width = BIND_EQ(some);
+            REQUIRE(it->x == 550);
 
             some = 2000;
-            REQUIRE(it.x == 1050);
+            REQUIRE(it->x == 1050);
         }
     }
 
     SECTION("calculate x: as child")
     {
-        it.parent = &it50;
+        it->parent = it50;
 
         SECTION("no horizontal")
         {
-            it.x = 1000;
-            REQUIRE(it.x == 1000);
+            it->x = 1000;
+            REQUIRE(it->x == 1000);
 
-            it.anchors.left_margin = 1000;
-            it.anchors.right_margin = 10000;
-            REQUIRE(it.x == 1000);
+            it->anchors.left_margin = 1000;
+            it->anchors.right_margin = 10000;
+            REQUIRE(it->x == 1000);
         }
 
         SECTION("left")
         {
-            it.anchors.set_left(&it50, anchors::left);
-            REQUIRE(it.x == 0);
+            it->anchors.set_left(it50, anchors::left);
+            REQUIRE(it->x == 0);
 
-            it.anchors.set_left(&it50, anchors::horizontal_center);
-            REQUIRE(it.x == 25);
+            it->anchors.set_left(it50, anchors::horizontal_center);
+            REQUIRE(it->x == 25);
 
-            it.anchors.set_left(&it50, anchors::right);
-            REQUIRE(it.x == 50);
+            it->anchors.set_left(it50, anchors::right);
+            REQUIRE(it->x == 50);
         }
 
         SECTION("left with margin")
         {
-            it.anchors.left_margin = 1000;
-            it.anchors.right_margin = 10000;
+            it->anchors.left_margin = 1000;
+            it->anchors.right_margin = 10000;
 
-            it.anchors.set_left(&it50, anchors::left);
-            REQUIRE(it.x == 1000);
+            it->anchors.set_left(it50, anchors::left);
+            REQUIRE(it->x == 1000);
 
-            it.anchors.set_left(&it50, anchors::horizontal_center);
-            REQUIRE(it.x == 1025);
+            it->anchors.set_left(it50, anchors::horizontal_center);
+            REQUIRE(it->x == 1025);
 
-            it.anchors.set_left(&it50, anchors::right);
-            REQUIRE(it.x == 1050);
+            it->anchors.set_left(it50, anchors::right);
+            REQUIRE(it->x == 1050);
         }
 
         SECTION("horizontal center")
         {
-            it.anchors.left_margin = 1000;
-            it.anchors.right_margin = 10000;
-            it.width = 10;
+            it->anchors.left_margin = 1000;
+            it->anchors.right_margin = 10000;
+            it->width = 10;
 
-            it.anchors.set_horizontal_center(&it50, anchors::left);
-            REQUIRE(it.x == -5);
+            it->anchors.set_horizontal_center(it50, anchors::left);
+            REQUIRE(it->x == -5);
 
-            it.anchors.set_horizontal_center(&it50, anchors::horizontal_center);
-            REQUIRE(it.x == 20);
+            it->anchors.set_horizontal_center(it50, anchors::horizontal_center);
+            REQUIRE(it->x == 20);
 
-            it.anchors.set_horizontal_center(&it50, anchors::right);
-            REQUIRE(it.x == 45);
+            it->anchors.set_horizontal_center(it50, anchors::right);
+            REQUIRE(it->x == 45);
         }
 
         SECTION("right")
         {
-            it.width = 10;
+            it->width = 10;
 
-            it.anchors.set_right(&it50, anchors::left);
-            REQUIRE(it.x == -10);
+            it->anchors.set_right(it50, anchors::left);
+            REQUIRE(it->x == -10);
 
-            it.anchors.set_right(&it50, anchors::horizontal_center);
-            REQUIRE(it.x == 15);
+            it->anchors.set_right(it50, anchors::horizontal_center);
+            REQUIRE(it->x == 15);
 
-            it.anchors.set_right(&it50, anchors::right);
-            REQUIRE(it.x == 40);
+            it->anchors.set_right(it50, anchors::right);
+            REQUIRE(it->x == 40);
         }
 
         SECTION("right with margin")
         {
-            it.anchors.left_margin = 1000;
-            it.anchors.right_margin = 10000;
-            it.width = 10;
+            it->anchors.left_margin = 1000;
+            it->anchors.right_margin = 10000;
+            it->width = 10;
 
-            it.anchors.set_right(&it50, anchors::left);
-            REQUIRE(it.x == -10 - 10000);
+            it->anchors.set_right(it50, anchors::left);
+            REQUIRE(it->x == -10 - 10000);
 
-            it.anchors.set_right(&it50, anchors::horizontal_center);
-            REQUIRE(it.x == 15 - 10000);
+            it->anchors.set_right(it50, anchors::horizontal_center);
+            REQUIRE(it->x == 15 - 10000);
 
-            it.anchors.set_right(&it50, anchors::right);
-            REQUIRE(it.x == 40 - 10000);
+            it->anchors.set_right(it50, anchors::right);
+            REQUIRE(it->x == 40 - 10000);
         }
 
         SECTION("dynamic change")
         {
-            it.anchors.set_left(&it50, anchors::horizontal_center);
-            REQUIRE(it.x == 25);
+            it->anchors.set_left(it50, anchors::horizontal_center);
+            REQUIRE(it->x == 25);
 
-            it50.width = 1000;
-            REQUIRE(it.x == 500);
+            it50->width = 1000;
+            REQUIRE(it->x == 500);
 
             property<unit> some = 1000;
-            it50.width = BIND_EQ(some);
-            REQUIRE(it.x == 500);
+            it50->width = BIND_EQ(some);
+            REQUIRE(it->x == 500);
 
             some = 2000;
-            REQUIRE(it.x == 1000);
+            REQUIRE(it->x == 1000);
         }
     }
 
@@ -236,68 +236,68 @@ TEST_CASE("anchors")
     {
         SECTION("no horizontal")
         {
-            it.width = 1000;
-            REQUIRE(it.width == 1000);
+            it->width = 1000;
+            REQUIRE(it->width == 1000);
         }
 
         SECTION("left")
         {
-            it.width = 1000;
-            it.anchors.set_left(&it50, anchors::left);
-            REQUIRE(it.width == 1000);
+            it->width = 1000;
+            it->anchors.set_left(it50, anchors::left);
+            REQUIRE(it->width == 1000);
         }
 
         SECTION("horizontal center")
         {
-            it.width = 1000;
-            it.anchors.set_horizontal_center(&it50, anchors::left);
-            REQUIRE(it.width == 1000);
+            it->width = 1000;
+            it->anchors.set_horizontal_center(it50, anchors::left);
+            REQUIRE(it->width == 1000);
         }
 
         SECTION("right")
         {
-            it.width = 1000;
-            it.anchors.set_right(&it50, anchors::left);
-            REQUIRE(it.width == 1000);
+            it->width = 1000;
+            it->anchors.set_right(it50, anchors::left);
+            REQUIRE(it->width == 1000);
         }
 
         SECTION("left & right")
         {
-            it.width = 1000;
-            it.anchors.set_left(&it50, anchors::left);
-            it.anchors.set_right(&it50, anchors::left);
-            REQUIRE(it.width == 0);
+            it->width = 1000;
+            it->anchors.set_left(it50, anchors::left);
+            it->anchors.set_right(it50, anchors::left);
+            REQUIRE(it->width == 0);
 
-            it.anchors.set_right(&it50, anchors::horizontal_center);
-            REQUIRE(it.width == 25);
+            it->anchors.set_right(it50, anchors::horizontal_center);
+            REQUIRE(it->width == 25);
 
-            it.anchors.set_right(&it50, anchors::right);
-            REQUIRE(it.width == 50);
+            it->anchors.set_right(it50, anchors::right);
+            REQUIRE(it->width == 50);
 
-            it.anchors.set_left(&it50, anchors::horizontal_center);
-            REQUIRE(it.width == 25);
+            it->anchors.set_left(it50, anchors::horizontal_center);
+            REQUIRE(it->width == 25);
 
-            it.anchors.set_left(&it50, anchors::right);
-            REQUIRE(it.width == 0);
+            it->anchors.set_left(it50, anchors::right);
+            REQUIRE(it->width == 0);
         }
 
         // other configurations are UB
 
         SECTION("dynamic change")
         {
-            it.anchors.set_left(&it50, anchors::left);
-            it.anchors.set_right(&it50, anchors::right);
-            REQUIRE(it.width == 50);
+            it->anchors.set_left(it50, anchors::left);
+            it->anchors.set_right(it50, anchors::right);
+            REQUIRE(it->width == 50);
 
-            it50.width = 1000;
-            REQUIRE(it.width == 1000);
+            it50->width = 1000;
+            REQUIRE(it->width == 1000);
 
             property<unit> some = 1000;
-            it50.width = BIND_EQ(some);
-            REQUIRE(it.width == 1000);
+            it50->width = BIND_EQ(some);
+            REQUIRE(it->width == 1000);
 
             some = 2000;
-            REQUIRE(it.width == 2000);
+            REQUIRE(it->width == 2000);
         }
     }
 
@@ -305,205 +305,205 @@ TEST_CASE("anchors")
     {
         SECTION("no vertical")
         {
-            it.y = 1000;
-            REQUIRE(it.y == 1000);
+            it->y = 1000;
+            REQUIRE(it->y == 1000);
 
-            it.anchors.top_margin = 1000;
-            it.anchors.bottom_margin = 10000;
-            REQUIRE(it.y == 1000);
+            it->anchors.top_margin = 1000;
+            it->anchors.bottom_margin = 10000;
+            REQUIRE(it->y == 1000);
         }
 
         SECTION("left")
         {
-            it.anchors.set_top(&it50, anchors::top);
-            REQUIRE(it.y == 50);
+            it->anchors.set_top(it50, anchors::top);
+            REQUIRE(it->y == 50);
 
-            it.anchors.set_top(&it50, anchors::vertical_center);
-            REQUIRE(it.y == 75);
+            it->anchors.set_top(it50, anchors::vertical_center);
+            REQUIRE(it->y == 75);
 
-            it.anchors.set_top(&it50, anchors::bottom);
-            REQUIRE(it.y == 100);
+            it->anchors.set_top(it50, anchors::bottom);
+            REQUIRE(it->y == 100);
         }
 
         SECTION("left with margin")
         {
-            it.anchors.top_margin = 1000;
-            it.anchors.bottom_margin = 10000;
+            it->anchors.top_margin = 1000;
+            it->anchors.bottom_margin = 10000;
 
-            it.anchors.set_top(&it50, anchors::top);
-            REQUIRE(it.y == 1050);
+            it->anchors.set_top(it50, anchors::top);
+            REQUIRE(it->y == 1050);
 
-            it.anchors.set_top(&it50, anchors::vertical_center);
-            REQUIRE(it.y == 1075);
+            it->anchors.set_top(it50, anchors::vertical_center);
+            REQUIRE(it->y == 1075);
 
-            it.anchors.set_top(&it50, anchors::bottom);
-            REQUIRE(it.y == 1100);
+            it->anchors.set_top(it50, anchors::bottom);
+            REQUIRE(it->y == 1100);
         }
 
         SECTION("horizontal center")
         {
-            it.anchors.top_margin = 1000;
-            it.anchors.bottom_margin = 10000;
-            it.height = 10;
+            it->anchors.top_margin = 1000;
+            it->anchors.bottom_margin = 10000;
+            it->height = 10;
 
-            it.anchors.set_vertical_center(&it50, anchors::top);
-            REQUIRE(it.y == 45);
+            it->anchors.set_vertical_center(it50, anchors::top);
+            REQUIRE(it->y == 45);
 
-            it.anchors.set_vertical_center(&it50, anchors::vertical_center);
-            REQUIRE(it.y == 70);
+            it->anchors.set_vertical_center(it50, anchors::vertical_center);
+            REQUIRE(it->y == 70);
 
-            it.anchors.set_vertical_center(&it50, anchors::bottom);
-            REQUIRE(it.y == 95);
+            it->anchors.set_vertical_center(it50, anchors::bottom);
+            REQUIRE(it->y == 95);
         }
 
         SECTION("right")
         {
-            it.height = 10;
+            it->height = 10;
 
-            it.anchors.set_bottom(&it50, anchors::top);
-            REQUIRE(it.y == 40);
+            it->anchors.set_bottom(it50, anchors::top);
+            REQUIRE(it->y == 40);
 
-            it.anchors.set_bottom(&it50, anchors::vertical_center);
-            REQUIRE(it.y == 65);
+            it->anchors.set_bottom(it50, anchors::vertical_center);
+            REQUIRE(it->y == 65);
 
-            it.anchors.set_bottom(&it50, anchors::bottom);
-            REQUIRE(it.y == 90);
+            it->anchors.set_bottom(it50, anchors::bottom);
+            REQUIRE(it->y == 90);
         }
 
         SECTION("right with margin")
         {
-            it.anchors.top_margin = 1000;
-            it.anchors.bottom_margin = 10000;
-            it.height = 10;
+            it->anchors.top_margin = 1000;
+            it->anchors.bottom_margin = 10000;
+            it->height = 10;
 
-            it.anchors.set_bottom(&it50, anchors::top);
-            REQUIRE(it.y == 40 - 10000);
+            it->anchors.set_bottom(it50, anchors::top);
+            REQUIRE(it->y == 40 - 10000);
 
-            it.anchors.set_bottom(&it50, anchors::vertical_center);
-            REQUIRE(it.y == 65 - 10000);
+            it->anchors.set_bottom(it50, anchors::vertical_center);
+            REQUIRE(it->y == 65 - 10000);
 
-            it.anchors.set_bottom(&it50, anchors::bottom);
-            REQUIRE(it.y == 90 - 10000);
+            it->anchors.set_bottom(it50, anchors::bottom);
+            REQUIRE(it->y == 90 - 10000);
         }
 
         SECTION("dynamic change")
         {
-            it.anchors.set_top(&it50, anchors::vertical_center);
-            REQUIRE(it.y == 75);
+            it->anchors.set_top(it50, anchors::vertical_center);
+            REQUIRE(it->y == 75);
 
-            it50.height = 1000;
-            REQUIRE(it.y == 550);
+            it50->height = 1000;
+            REQUIRE(it->y == 550);
 
             property<unit> some = 1000;
-            it50.height = BIND_EQ(some);
-            REQUIRE(it.y == 550);
+            it50->height = BIND_EQ(some);
+            REQUIRE(it->y == 550);
 
             some = 2000;
-            REQUIRE(it.y == 1050);
+            REQUIRE(it->y == 1050);
         }
     }
 
     SECTION("calculate y: as child")
     {
-        it.parent = &it50;
+        it->parent = it50;
 
         SECTION("no vertical")
         {
-            it.y = 1000;
-            REQUIRE(it.y == 1000);
+            it->y = 1000;
+            REQUIRE(it->y == 1000);
 
-            it.anchors.top_margin = 1000;
-            it.anchors.bottom_margin = 10000;
-            REQUIRE(it.y == 1000);
+            it->anchors.top_margin = 1000;
+            it->anchors.bottom_margin = 10000;
+            REQUIRE(it->y == 1000);
         }
 
         SECTION("top")
         {
-            it.anchors.set_top(&it50, anchors::top);
-            REQUIRE(it.y == 0);
+            it->anchors.set_top(it50, anchors::top);
+            REQUIRE(it->y == 0);
 
-            it.anchors.set_top(&it50, anchors::vertical_center);
-            REQUIRE(it.y == 25);
+            it->anchors.set_top(it50, anchors::vertical_center);
+            REQUIRE(it->y == 25);
 
-            it.anchors.set_top(&it50, anchors::bottom);
-            REQUIRE(it.y == 50);
+            it->anchors.set_top(it50, anchors::bottom);
+            REQUIRE(it->y == 50);
         }
 
         SECTION("top with margin")
         {
-            it.anchors.top_margin = 1000;
-            it.anchors.bottom_margin = 10000;
+            it->anchors.top_margin = 1000;
+            it->anchors.bottom_margin = 10000;
 
-            it.anchors.set_top(&it50, anchors::top);
-            REQUIRE(it.y == 1000);
+            it->anchors.set_top(it50, anchors::top);
+            REQUIRE(it->y == 1000);
 
-            it.anchors.set_top(&it50, anchors::vertical_center);
-            REQUIRE(it.y == 1025);
+            it->anchors.set_top(it50, anchors::vertical_center);
+            REQUIRE(it->y == 1025);
 
-            it.anchors.set_top(&it50, anchors::bottom);
-            REQUIRE(it.y == 1050);
+            it->anchors.set_top(it50, anchors::bottom);
+            REQUIRE(it->y == 1050);
         }
 
         SECTION("vertical center")
         {
-            it.anchors.top_margin = 1000;
-            it.anchors.bottom_margin = 10000;
-            it.height = 10;
+            it->anchors.top_margin = 1000;
+            it->anchors.bottom_margin = 10000;
+            it->height = 10;
 
-            it.anchors.set_vertical_center(&it50, anchors::top);
-            REQUIRE(it.y == -5);
+            it->anchors.set_vertical_center(it50, anchors::top);
+            REQUIRE(it->y == -5);
 
-            it.anchors.set_vertical_center(&it50, anchors::vertical_center);
-            REQUIRE(it.y == 20);
+            it->anchors.set_vertical_center(it50, anchors::vertical_center);
+            REQUIRE(it->y == 20);
 
-            it.anchors.set_vertical_center(&it50, anchors::bottom);
-            REQUIRE(it.y == 45);
+            it->anchors.set_vertical_center(it50, anchors::bottom);
+            REQUIRE(it->y == 45);
         }
 
         SECTION("bottom")
         {
-            it.height = 10;
+            it->height = 10;
 
-            it.anchors.set_bottom(&it50, anchors::top);
-            REQUIRE(it.y == -10);
+            it->anchors.set_bottom(it50, anchors::top);
+            REQUIRE(it->y == -10);
 
-            it.anchors.set_bottom(&it50, anchors::vertical_center);
-            REQUIRE(it.y == 15);
+            it->anchors.set_bottom(it50, anchors::vertical_center);
+            REQUIRE(it->y == 15);
 
-            it.anchors.set_bottom(&it50, anchors::bottom);
-            REQUIRE(it.y == 40);
+            it->anchors.set_bottom(it50, anchors::bottom);
+            REQUIRE(it->y == 40);
         }
 
         SECTION("bottom with margin")
         {
-            it.anchors.top_margin = 1000;
-            it.anchors.bottom_margin = 10000;
-            it.height = 10;
+            it->anchors.top_margin = 1000;
+            it->anchors.bottom_margin = 10000;
+            it->height = 10;
 
-            it.anchors.set_bottom(&it50, anchors::top);
-            REQUIRE(it.y == -10 - 10000);
+            it->anchors.set_bottom(it50, anchors::top);
+            REQUIRE(it->y == -10 - 10000);
 
-            it.anchors.set_bottom(&it50, anchors::vertical_center);
-            REQUIRE(it.y == 15 - 10000);
+            it->anchors.set_bottom(it50, anchors::vertical_center);
+            REQUIRE(it->y == 15 - 10000);
 
-            it.anchors.set_bottom(&it50, anchors::bottom);
-            REQUIRE(it.y == 40 - 10000);
+            it->anchors.set_bottom(it50, anchors::bottom);
+            REQUIRE(it->y == 40 - 10000);
         }
 
         SECTION("dynamic change")
         {
-            it.anchors.set_top(&it50, anchors::vertical_center);
-            REQUIRE(it.y == 25);
+            it->anchors.set_top(it50, anchors::vertical_center);
+            REQUIRE(it->y == 25);
 
-            it50.height = 1000;
-            REQUIRE(it.y == 500);
+            it50->height = 1000;
+            REQUIRE(it->y == 500);
 
             property<unit> some = 1000;
-            it50.height = BIND_EQ(some);
-            REQUIRE(it.y == 500);
+            it50->height = BIND_EQ(some);
+            REQUIRE(it->y == 500);
 
             some = 2000;
-            REQUIRE(it.y == 1000);
+            REQUIRE(it->y == 1000);
         }
     }
 
@@ -511,68 +511,68 @@ TEST_CASE("anchors")
     {
         SECTION("no vertical")
         {
-            it.height = 1000;
-            REQUIRE(it.height == 1000);
+            it->height = 1000;
+            REQUIRE(it->height == 1000);
         }
 
         SECTION("top")
         {
-            it.height = 1000;
-            it.anchors.set_top(&it50, anchors::top);
-            REQUIRE(it.height == 1000);
+            it->height = 1000;
+            it->anchors.set_top(it50, anchors::top);
+            REQUIRE(it->height == 1000);
         }
 
         SECTION("vertical center")
         {
-            it.height = 1000;
-            it.anchors.set_vertical_center(&it50, anchors::top);
-            REQUIRE(it.height == 1000);
+            it->height = 1000;
+            it->anchors.set_vertical_center(it50, anchors::top);
+            REQUIRE(it->height == 1000);
         }
 
         SECTION("bottom")
         {
-            it.height = 1000;
-            it.anchors.set_bottom(&it50, anchors::top);
-            REQUIRE(it.height == 1000);
+            it->height = 1000;
+            it->anchors.set_bottom(it50, anchors::top);
+            REQUIRE(it->height == 1000);
         }
 
         SECTION("top & bottom")
         {
-            it.height = 1000;
-            it.anchors.set_top(&it50, anchors::top);
-            it.anchors.set_bottom(&it50, anchors::top);
-            REQUIRE(it.height == 0);
+            it->height = 1000;
+            it->anchors.set_top(it50, anchors::top);
+            it->anchors.set_bottom(it50, anchors::top);
+            REQUIRE(it->height == 0);
 
-            it.anchors.set_bottom(&it50, anchors::vertical_center);
-            REQUIRE(it.height == 25);
+            it->anchors.set_bottom(it50, anchors::vertical_center);
+            REQUIRE(it->height == 25);
 
-            it.anchors.set_bottom(&it50, anchors::bottom);
-            REQUIRE(it.height == 50);
+            it->anchors.set_bottom(it50, anchors::bottom);
+            REQUIRE(it->height == 50);
 
-            it.anchors.set_top(&it50, anchors::vertical_center);
-            REQUIRE(it.height == 25);
+            it->anchors.set_top(it50, anchors::vertical_center);
+            REQUIRE(it->height == 25);
 
-            it.anchors.set_top(&it50, anchors::bottom);
-            REQUIRE(it.height == 0);
+            it->anchors.set_top(it50, anchors::bottom);
+            REQUIRE(it->height == 0);
         }
 
         // other configurations are UB
 
         SECTION("dynamic change")
         {
-            it.anchors.set_top(&it50, anchors::top);
-            it.anchors.set_bottom(&it50, anchors::bottom);
-            REQUIRE(it.height == 50);
+            it->anchors.set_top(it50, anchors::top);
+            it->anchors.set_bottom(it50, anchors::bottom);
+            REQUIRE(it->height == 50);
 
-            it50.height = 1000;
-            REQUIRE(it.height == 1000);
+            it50->height = 1000;
+            REQUIRE(it->height == 1000);
 
             property<unit> some = 1000;
-            it50.height = BIND_EQ(some);
-            REQUIRE(it.height == 1000);
+            it50->height = BIND_EQ(some);
+            REQUIRE(it->height == 1000);
 
             some = 2000;
-            REQUIRE(it.height == 2000);
+            REQUIRE(it->height == 2000);
         }
     }
 }

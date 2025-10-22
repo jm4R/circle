@@ -4,15 +4,15 @@
 #include <circle/object.hpp>
 #include <circle/reactive/bind.hpp>
 #include <circle/reactive/property.hpp>
-#include <circle/reactive/tracking_ptr.hpp>
+#include <circle/reactive/ptr.hpp>
 #include <circle/utils/sdl_utils.hpp>
 
 namespace circle {
 
 class item;
-using item_ptr = circle::tracking_ptr<item>;
+using item_ptr = tracking_ptr<item>;
 
-class item : public object, public enable_tracking_ptr<item>
+class item : public object
 {
 public: /*properties*/
     item_ptr parent;
@@ -26,24 +26,16 @@ public: /*properties*/
 
 public:
     item();
-    ~item();
-
-    item(item&& other);
-    item& operator=(item&& other);
-
-    using enable_tracking_ptr<item>::moved;
-    using enable_tracking_ptr<item>::before_destroyed;
 
     virtual void add(item_ptr child);
 
     template <typename T>
-    T& add()
+    tracking_ptr<T> add()
     {
-        auto ptr = std::make_unique<T>();
-        auto raw_ptr = ptr.get();
-        add(raw_ptr);
-        owning_items_.push_back(std::move(ptr));
-        return *raw_ptr;
+        auto ptr = make_ptr<T>();
+        add(ptr);
+        owning_items_.emplace_back(std::move(ptr));
+        return static_pointer_cast<T>(tracking_ptr{owning_items_.back()});
     }
 
     std::vector<item_ptr>& children() { return children_; }
@@ -79,7 +71,7 @@ protected:
     }
 
 private:
-    std::vector<std::unique_ptr<item>> owning_items_;
+    std::vector<ptr<item>> owning_items_;
     std::vector<item_ptr> children_;
 };
 } // namespace circle

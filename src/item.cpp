@@ -2,25 +2,7 @@
 
 namespace circle {
 
-item::item() : anchors{this} {}
-
-item::~item()
-{
-    enable_tracking_ptr<item>::call_before_destroyed();
-}
-
-item::item(item&& other)
-    : object{std::move(other)}, anchors{std::move(other.anchors)}
-{
-    enable_tracking_ptr<item>::call_moved();
-}
-
-item& item::operator=(item&& other)
-{
-    object::operator=(std::move(other));
-    enable_tracking_ptr<item>::call_moved();
-    return *this;
-}
+item::item() : anchors{tracking_form_this<item>()} {}
 
 void item::add(item_ptr child)
 {
@@ -28,7 +10,7 @@ void item::add(item_ptr child)
         return;
     //    if (child->parent)
     //        child->parent->remove(child);
-    child->parent = this;
+    child->parent = tracking_form_this<item>();
     children_.emplace_back(std::move(child));
 }
 

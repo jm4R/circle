@@ -25,7 +25,10 @@
     },
     {
       "name": "debug",
-      "inherits": "base-debug"
+      "inherits": "base-debug",
+      "cacheVariables": {
+        "CMAKE_CXX_COMPILER": "g++-10"
+      }
     },
     {
       "name": "release",
